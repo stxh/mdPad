@@ -1,4 +1,33 @@
-<script lang="ts">
+<script>
+  import logo from './assets/images/logo-universal.png'
+  import {Greet} from '../wailsjs/go/main/App.js'
+  import { marked } from 'marked'; // Or your markdown parser
+  import { onMount } from 'svelte';
+
+  let markdownText = '# Hello World\n## Test 2\n### hello\n```bash\n ls -la\n ```';
+  let mdvalue = '';
+
+  $: mdvalue = marked(markdownText);
+  console.log('mdvalue:', mdvalue); // Inspect the output
+
+  // async function loadFileContent() {
+  //   try {
+  //     markdownText = await invoke('get_file_md');
+  //     console.log(markdownText);
+  //   } catch (error) {
+  //     console.error('Failed to load file content:', error);
+  //   }
+  // }
+
+  // onMount(() => {
+  //   loadFileContent();
+  // });
+
+</script>
+
+{@html mdvalue}
+
+<!-- <script lang="ts">
   import logo from './assets/images/logo-universal.png'
   import {Greet} from '../wailsjs/go/main/App.js'
 
@@ -76,4 +105,4 @@
     background-color: rgba(255, 255, 255, 1);
   }
 
-</style>
+</style> -->
