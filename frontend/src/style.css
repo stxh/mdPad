@@ -1,7 +1,7 @@
 html {
-    background-color: rgba(27, 38, 54, 1);
-    text-align: center;
-    color: white;
+    background-color: white;
+    /* text-align: center; */
+    color: black;
 }
 
 body {
@@ -20,7 +20,19 @@ body {
     url("assets/fonts/nunito-v16-latin-regular.woff2") format("woff2");
 }
 
-#app {
-    height: 100vh;
-    text-align: center;
+
+@font-face {
+  font-family: "IcoMoon";
+  font-style: normal;
+  font-weight: 400;
+  src: local(""),
+  url("assets/fonts/icomoonapp.woff2") format("woff2");
+}
+
+.charwoff2 {
+  font-family: "IcoMoon";
+}
+
+mjx-container[jax="CHTML"][display="true"] {
+  text-align: left !important;
 }

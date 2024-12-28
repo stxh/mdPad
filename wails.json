@@ -9,5 +9,23 @@
   "author": {
     "name": "StXh",
     "email": "stxh007@gmail.com"
+  },
+  "info": {
+    "fileAssociations": [
+    {
+        "ext": "md",
+        "name": "MarkDown",
+        "description": "MarkDown File",
+        "iconName": "mdFileIcon",
+        "role": "Editor"
+      }
+    ],
+    "protocols": [
+      {
+        "scheme": "mdpad",
+        "description": "mdpad protocol",
+        "role": "Editor"
+      }
+    ]
   }
 }
