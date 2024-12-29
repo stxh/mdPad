@@ -6,3 +6,8 @@ const app = new App({
 })
 
 export default app
+
+// interface Result {
+//   value: string;
+//   error: string;
+// }

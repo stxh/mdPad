@@ -33,11 +33,11 @@ func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 }
 
-// Greet returns a greeting for the given name
-func (a *App) GetMdContent() (string, string) {
+// GetMdContent
+func (a *App) GetMdContent() map[string]interface{} {
     if a.Filename == "" {
         // log.Println("### Error\n没有指定文件名")
-        return "", ""
+        return map[string]interface{}{"value": "", "filename": ""}
     }
 
     // log.Println("要处理的文件是：", a.Filename)
@@ -46,20 +46,21 @@ func (a *App) GetMdContent() (string, string) {
     if err != nil {
         errMsg := fmt.Sprintf("### Error\n读取文件出错：%v", err)
         log.Println(errMsg)
-        return "", ""
+        return map[string]interface{}{"value": "", "filename": ""}
     }
 
 	// log.Println("-->Content: ", string(content))
-    return string(content), a.Filename
+    return map[string]interface{}{"value": string(content), "filename": a.Filename}
 }
 
-func (a *App) goNewFile() string {
+// GoNewFile
+func (a *App) GoNewFile() string {
 	a.Filename = ""
 	return "OK"
 }
 
 // goOpenFile
-func (a *App) GoOpenFile() (string, string) {
+func (a *App) GoOpenFile() map[string]interface{} {
 	odo := runtime.OpenDialogOptions{
 		DefaultDirectory: "",           // string
 		DefaultFilename:  "",           // string
@@ -74,18 +75,19 @@ func (a *App) GoOpenFile() (string, string) {
 
 	filename, err := runtime.OpenFileDialog(a.ctx, odo)
 	if err != nil {
-		return "", ""
+		return map[string]interface{}{"value": "", "filename": ""}
 	}
 
 	a.Filename = filename
 	content, err := os.ReadFile(filename)
 	if err != nil {
-		return "", ""
+		return map[string]interface{}{"value": "", "filename": ""}
 	}
 
-	return string(content), filename
+	return map[string]interface{}{"value": string(content), "filename": filename}
 }
 
+// GoSaveFile
 func (a *App) GoSaveFile(content string) string {
 	if a.Filename == "" {
 		sdo := runtime.SaveDialogOptions {
@@ -112,7 +114,8 @@ func (a *App) GoSaveFile(content string) string {
 	return "Error"
 }
 
-func (a *App) GoSaveAsFile(content string) (string, string) {
+// GoSaveAsFile resutl: {"value": "OK", "filename": "e:\\StXhCode\\go\\mdPad\\untitle.md"}
+func (a *App) GoSaveAsFile(content string) map[string]interface{} {
 	a.Filename = ""
 
 	sdo := runtime.SaveDialogOptions {
@@ -133,8 +136,8 @@ func (a *App) GoSaveAsFile(content string) (string, string) {
 		a.Filename = filename
 		err := os.WriteFile(a.Filename, []byte(content), 0644)
 		if err == nil {
-			return "OK", a.Filename
+			return map[string]interface{}{"value": "OK", "filename": a.Filename}
 		}
 	}
-	return "Error", ""
+	return map[string]interface{}{"value": "Error", "filename": ""}
 }

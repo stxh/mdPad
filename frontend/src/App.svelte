@@ -22,8 +22,6 @@
     WindowSetTitle(title)
   }
 
-
- 
   onMount(() => {
      // console.log("--> value=", value)
     const vditor = new Vditor("vditor-container", {
@@ -75,10 +73,11 @@
   })
 
   function initMd(vditor) {
-    app.GetMdContent().then((result, name) => {
-      filename = name;
+    app.GetMdContent().then((result) => {
+      // console.log("result ->", result)
+      filename = result.filename;
       setWindowTitle()
-      vditor.setValue(result)
+      vditor.setValue(result.value)
     });
   }
 
@@ -91,10 +90,11 @@
   }
 
   function clickOpenFile(vditor) {
-    app.GoOpenFile().then((result, name) => {
-      filename = name;
+    app.GoOpenFile().then((result) => {
+      //  console.log("result ->", result.filename, result.value)
+      filename = result.filename;
       setWindowTitle()
-      vditor.setValue(result, true)
+      vditor.setValue(result.value, true)
     })
   }
 
@@ -106,6 +106,7 @@
 
   function clickSaveAsFile(vditor) {
     app.GoSaveAsFile(vditor.getValue()).then((result, file) => {
+      // console.log("result", result, "file", file) 
       filename = file;
       showToastMessage("Save to file: "+ filename + " " + result)
     })
