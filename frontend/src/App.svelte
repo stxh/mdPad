@@ -1,22 +1,28 @@
 <script>
   import { onMount } from "svelte"
   import Vditor from "vditor"
-  import { Greet } from "../wailsjs/go/main/App";
-  import Modal from "./Modal.svelte";
 
-  let showModal = false;
-  let modalTitle = "";
-  let modalMessage = "";
+  import * as app from "../wailsjs/go/main/App";
+  import { WindowSetTitle, } from "../wailsjs/runtime/runtime.js"
 
-  function openModal(title, message) {
-      modalTitle = title;
-      modalMessage = message;
-      showModal = true;
+  import { SvelteToast, toast } from '@zerodevx/svelte-toast';
+
+  function showToastMessage(message) {
+      toast.push(message);
   }
 
-  function handleClose() {
-      console.log("Modal closed!");
+  let filename = "";
+
+  function setWindowTitle() {
+    let title = "mdPad"
+    if (filename != "") {
+      title += " - " + filename
+    }
+    // console.log("--> setWindowTitle title=", title)
+    WindowSetTitle(title)
   }
+
+
  
   onMount(() => {
      // console.log("--> value=", value)
@@ -66,41 +72,42 @@
       after:(() => {initMd(vditor)}),
     })
 
-    window.runtime.WindowSetTitle("mdPad - file")
-
   })
 
   function initMd(vditor) {
-    Greet("init", "").then((result) => {
-      console.log("--> in greet initMd result=",result)
-      // alert("ok")
+    app.GetMdContent().then((result, name) => {
+      filename = name;
+      setWindowTitle()
       vditor.setValue(result)
     });
   }
 
   function clickNewFile(vditor) {
-    Greet("new", "") .then(() => {
+    app.GoNewFile() .then(() => {
+      filename = "";
+      setWindowTitle()
       vditor.setValue("")
     })
   }
 
   function clickOpenFile(vditor) {
-    Greet("open", "").then((result) => {
-      // console.log("--> in greet open result=",result)
+    app.GoOpenFile().then((result, name) => {
+      filename = name;
+      setWindowTitle()
       vditor.setValue(result, true)
     })
   }
 
   function clickSaveFile(vditor) {
-    Greet("save", vditor.getValue()).then((result) => {
-      // alert("Save file "+result)
-      openModal("Save file", "Save file "+result)
+    app.GoSaveFile(vditor.getValue()).then((result) => {
+      showToastMessage("Save to file: "+ filename + " " + result)
     })
   }
 
   function clickSaveAsFile(vditor) {
-    Greet("saveas", vditor.getValue()).then((result) => {
-      alert("Save as file "+result)
+    app.GoSaveAsFile(vditor.getValue()).then((result, file) => {
+      filename = file;
+      showToastMessage("Save to file: "+ filename + " " + result)
     })
   }
 
@@ -111,4 +118,4 @@
   <div id="vditor-container"></div>
 </main>
 
-<Modal isOpen={showModal} title={modalTitle} message={modalMessage} onClose={handleClose} />
+<SvelteToast />

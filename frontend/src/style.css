@@ -1,3 +1,5 @@
+@import 'flowbite/dist/flowbite.css';
+
 html {
     background-color: white;
     /* text-align: center; */
@@ -18,19 +20,6 @@ body {
     font-weight: 400;
     src: local(""),
     url("assets/fonts/nunito-v16-latin-regular.woff2") format("woff2");
-}
-
-
-@font-face {
-  font-family: "IcoMoon";
-  font-style: normal;
-  font-weight: 400;
-  src: local(""),
-  url("assets/fonts/icomoonapp.woff2") format("woff2");
-}
-
-.charwoff2 {
-  font-family: "IcoMoon";
 }
 
 mjx-container[jax="CHTML"][display="true"] {

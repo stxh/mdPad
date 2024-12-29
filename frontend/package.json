@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@remirror/react-editors": "^2.0.1",
-    "marked": "^15.0.4",
+    "@zerodevx/svelte-toast": "^0.9.6",
     "vditor": "^3.10.8"
   }
 }

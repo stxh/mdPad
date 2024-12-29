@@ -1,4 +1,4 @@
-module mdpad
+module mdPad
 
 go 1.21
 

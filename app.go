@@ -33,45 +33,33 @@ func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 }
 
-func (a *App) Greet(ctl string, content string) string {
-    switch ctl {
-    case "init":
-        return a.getMdContent()
-    case "open":
-        return a.goOpenFile()
-    case "save":
-        return a.goSaveFile(content)
-    case "saveas":
-        return a.goSaveAsFile(content)
-	case "new":
-		return a.goNewFile()
-    default:
-        return "Command Error"
-    }
-}
-
 // Greet returns a greeting for the given name
-func (a *App) getMdContent() string {
+func (a *App) GetMdContent() (string, string) {
     if a.Filename == "" {
-        log.Println("### Error\n没有指定文件名")
-        return "### Error\n没有指定文件名"
+        // log.Println("### Error\n没有指定文件名")
+        return "", ""
     }
 
-    log.Println("要处理的文件是：", a.Filename)
+    // log.Println("要处理的文件是：", a.Filename)
    
     content, err := os.ReadFile(a.Filename)
     if err != nil {
         errMsg := fmt.Sprintf("### Error\n读取文件出错：%v", err)
         log.Println(errMsg)
-        return errMsg
+        return "", ""
     }
 
 	// log.Println("-->Content: ", string(content))
-    return string(content)
+    return string(content), a.Filename
+}
+
+func (a *App) goNewFile() string {
+	a.Filename = ""
+	return "OK"
 }
 
 // goOpenFile
-func (a *App) goOpenFile() string {
+func (a *App) GoOpenFile() (string, string) {
 	odo := runtime.OpenDialogOptions{
 		DefaultDirectory: "",           // string
 		DefaultFilename:  "",           // string
@@ -86,19 +74,19 @@ func (a *App) goOpenFile() string {
 
 	filename, err := runtime.OpenFileDialog(a.ctx, odo)
 	if err != nil {
-		return "### Test Message\n测试消息"
+		return "", ""
 	}
 
 	a.Filename = filename
 	content, err := os.ReadFile(filename)
 	if err != nil {
-		return "### Test Message\n测试消息"
+		return "", ""
 	}
 
-	return string(content)
+	return string(content), filename
 }
 
-func (a *App) goSaveFile(content string) string {
+func (a *App) GoSaveFile(content string) string {
 	if a.Filename == "" {
 		sdo := runtime.SaveDialogOptions {
 			DefaultDirectory: "",           // string
@@ -124,12 +112,12 @@ func (a *App) goSaveFile(content string) string {
 	return "Error"
 }
 
-func (a *App) goSaveAsFile(content string) string {
+func (a *App) GoSaveAsFile(content string) (string, string) {
 	a.Filename = ""
 
 	sdo := runtime.SaveDialogOptions {
 		DefaultDirectory: "",           // string
-		DefaultFilename:  "nutitile.md",           // string
+		DefaultFilename:  "untitle.md",           // string
 		Title:            "Save File",  // string
 		Filters: []runtime.FileFilter{
 			{
@@ -145,13 +133,8 @@ func (a *App) goSaveAsFile(content string) string {
 		a.Filename = filename
 		err := os.WriteFile(a.Filename, []byte(content), 0644)
 		if err == nil {
-			return "OK"
+			return "OK", a.Filename
 		}
 	}
-	return "Error"
-}
-
-func (a *App) goNewFile() string {
-	a.Filename = ""
-	return "OK"
+	return "Error", ""
 }
