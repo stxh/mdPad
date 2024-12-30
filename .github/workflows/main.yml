@@ -27,21 +27,16 @@ jobs:
             platform: "darwin/universal"
             os: "macos-latest"
 
-    runs-on: "ubuntu-latest"
-    steps:
-      - name: Update package list
-        run: sudo apt-get update
-
-      - name: Install dependencies
-        run: sudo apt-get install -y libwebkit2gtk-4.0-dev
-
     runs-on: ${{ matrix.build.os }}
     steps:
-
       - name: Checkout
         uses: actions/checkout@v2
         with:
           submodules: recursive
+
+      - name: Ubuntu-specific step
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libwebkit2gtk-4.0-dev
 
       - name: Install Bun
         uses: oven-sh/setup-bun@v1 # Use the official setup-bun action
