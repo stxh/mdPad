@@ -42,8 +42,8 @@ jobs:
       - name: Install dependencies
         run: cd frontend && bun install
 
-      - name: Build
-        run: cd frontend && bun run build # Or your build command
+      #- name: Build
+      #  run: cd frontend && bun run build # Or your build command
 
       - name: Build wails
         uses: dAppServer/wails-build-action@v2.2
