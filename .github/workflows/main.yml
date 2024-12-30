@@ -46,7 +46,7 @@ jobs:
       #  run: cd frontend && bun run build # Or your build command
 
       - name: Build wails
-        uses: wailsbuild.yml
+        uses: ./wails_build.yml
         # uses: dAppServer/wails-build-action@v2.2
         id: build
         with:
