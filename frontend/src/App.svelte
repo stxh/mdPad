@@ -3,7 +3,8 @@
   import Vditor from "vditor"
 
   import * as app from "../wailsjs/go/main/App";
-  import { WindowSetTitle, } from "../wailsjs/runtime/runtime.js"
+  import { WindowSetTitle } from "../wailsjs/runtime/runtime.js";
+  import * as runtime from "../wailsjs/runtime/runtime.js";
 
   import { SvelteToast, toast } from '@zerodevx/svelte-toast';
 
