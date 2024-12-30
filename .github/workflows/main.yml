@@ -17,13 +17,13 @@ jobs:
       fail-fast: false
       matrix:
         build:
-          - name: "mdPad"
+          - name: "App"
             platform: "linux/amd64"
             os: "ubuntu-latest"
-          - name: "mdPad"
+          - name: "App"
             platform: "windows/amd64"
             os: "windows-latest"
-          - name: "mdPad"
+          - name: "App"
             platform: "darwin/universal"
             os: "macos-latest"
 
