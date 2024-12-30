@@ -34,12 +34,6 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Ubuntu-specific step
-        if: runner.os == 'Linux'
-        run: |
-          sudo ln -sf /usr/lib/x86_64-linux-gnu/libwebkit2gtk-4.1.so.0 /usr/lib/x86_64-linux-gnu/libwebkit2gtk-4.0.so.37 \
-          sudo ln -sf /usr/lib/x86_64-linux-gnu/libjavascriptcoregtk-4.1.so.0 /usr/lib/x86_64-linux-gnu/libjavascriptcoregtk-4.0.so.18
-
       - name: Install Bun
         uses: oven-sh/setup-bun@v1 # Use the official setup-bun action
         with:
@@ -52,7 +46,8 @@ jobs:
       #  run: cd frontend && bun run build # Or your build command
 
       - name: Build wails
-        uses: dAppServer/wails-build-action@v2.2
+        uses: ./.github/workflows/wails_action.yml
+        # uses: dAppServer/wails-build-action@v2.2
         id: build
         with:
           build-name: ${{ matrix.build.name }}
