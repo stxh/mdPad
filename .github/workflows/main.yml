@@ -46,8 +46,9 @@ jobs:
       #  run: cd frontend && bun run build # Or your build command
 
       - name: Build wails
-        uses: ./wails_build.yml
+        # uses: ./wails_build.yml
         # uses: dAppServer/wails-build-action@v2.2
+        uses: stxh/wails-build-action@v2.3
         id: build
         with:
           build-name: ${{ matrix.build.name }}
