@@ -34,6 +34,17 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v1 # Use the official setup-bun action
+        with:
+          bun-version: latest # Or a specific version like '1.0.0'
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Build
+        run: bun run build # Or your build command
+
       - name: Build wails
         uses: dAppServer/wails-build-action@v2.2
         id: build
