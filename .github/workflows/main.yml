@@ -26,8 +26,7 @@ jobs:
           - name: "App"
             platform: "darwin/universal"
             os: "macos-latest"
-            macos-build-name: "mdPad"
-
+            
     runs-on: ${{ matrix.build.os }}
     steps:
       - name: Checkout
@@ -56,3 +55,4 @@ jobs:
           build-platform: ${{ matrix.build.platform }}
           package: false
           go-version: "1.23"
+          macos-build-name: "mdPad"
