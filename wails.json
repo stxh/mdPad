@@ -11,6 +11,7 @@
     "email": "stxh007@gmail.com"
   },
   "info": {
+    "version": "0.1.20",
     "fileAssociations": [
     {
         "ext": "md",
