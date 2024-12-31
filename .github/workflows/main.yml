@@ -48,7 +48,7 @@ jobs:
       - name: Build wails
         # uses: ./wails_build.yml
         # uses: dAppServer/wails-build-action@v2.2
-        uses: stxh/wails-build-action@v2.5
+        uses: stxh/wails-build-action@v2.6
         id: build
         with:
           build-name: ${{ matrix.build.name }}
