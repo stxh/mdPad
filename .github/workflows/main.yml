@@ -26,6 +26,7 @@ jobs:
           - name: "App"
             platform: "darwin/universal"
             os: "macos-latest"
+            macos-build-name: "mdPad"
 
     runs-on: ${{ matrix.build.os }}
     steps:
@@ -48,7 +49,7 @@ jobs:
       - name: Build wails
         # uses: ./wails_build.yml
         # uses: dAppServer/wails-build-action@v2.2
-        uses: stxh/wails-build-action@v2.4
+        uses: stxh/wails-build-action@v2.5
         id: build
         with:
           build-name: ${{ matrix.build.name }}
