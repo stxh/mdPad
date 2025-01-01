@@ -22,6 +22,10 @@
   "dependencies": {
     "@remirror/react-editors": "^2.0.1",
     "@zerodevx/svelte-toast": "^0.9.6",
+    "i18next": "^24.2.0",
+    "i18next-browser-languagedetector": "^8.0.2",
+    "svelte-i18n": "^4.0.1",
+    "svelte-i18next": "^2.2.2",
     "vditor": "^3.10.8"
   }
 }

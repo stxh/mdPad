@@ -3,28 +3,27 @@ package main
 import (
 	"context"
 	"fmt"
-	"os"
 	"log"
+	"os"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
 // App struct
 type App struct {
-	ctx context.Context
+	ctx      context.Context
 	Filename string
 }
 
-
 // NewApp creates a new App application struct
 func NewApp() *App {
-    var filename string
-    if len(os.Args) >= 2 {
-		// 获取第一个参数（os.Args[0] 是程序路径）
+	var filename string
+	if len(os.Args) >= 2 {
+		// Get the first argument (os.Args[0] is the program path)
 		filename = os.Args[1]
 		log.Println("--> Filename in Args: ", filename)
-    }
-    return &App{Filename: filename}
+	}
+	return &App{Filename: filename}
 }
 
 // startup is called when the app starts. The context is saved
@@ -35,22 +34,22 @@ func (a *App) startup(ctx context.Context) {
 
 // GetMdContent
 func (a *App) GetMdContent() map[string]interface{} {
-    if a.Filename == "" {
-        // log.Println("### Error\n没有指定文件名")
-        return map[string]interface{}{"value": "", "filename": ""}
-    }
+	if a.Filename == "" {
+		// log.Println("### Error\nNo filename specified")
+		return map[string]interface{}{"value": "", "filename": ""}
+	}
 
-    // log.Println("要处理的文件是：", a.Filename)
-   
-    content, err := os.ReadFile(a.Filename)
-    if err != nil {
-        errMsg := fmt.Sprintf("### Error\n读取文件出错：%v", err)
-        log.Println(errMsg)
-        return map[string]interface{}{"value": "", "filename": ""}
-    }
+	// log.Println("File to process:", a.Filename)
+
+	content, err := os.ReadFile(a.Filename)
+	if err != nil {
+		errMsg := fmt.Sprintf("### Error\nError reading file: %v", err)
+		log.Println(errMsg)
+		return map[string]interface{}{"value": "", "filename": ""}
+	}
 
 	// log.Println("-->Content: ", string(content))
-    return map[string]interface{}{"value": string(content), "filename": a.Filename}
+	return map[string]interface{}{"value": string(content), "filename": a.Filename}
 }
 
 // GoNewFile
@@ -62,9 +61,9 @@ func (a *App) GoNewFile() string {
 // goOpenFile
 func (a *App) GoOpenFile() map[string]interface{} {
 	odo := runtime.OpenDialogOptions{
-		DefaultDirectory: "",           // string
-		DefaultFilename:  "",           // string
-		Title:            "Open File",  // string
+		DefaultDirectory: "",          // string
+		DefaultFilename:  "",          // string
+		Title:            "Open File", // string
 		Filters: []runtime.FileFilter{
 			{
 				DisplayName: "Markdown Files (*.md)",
@@ -90,10 +89,10 @@ func (a *App) GoOpenFile() map[string]interface{} {
 // GoSaveFile
 func (a *App) GoSaveFile(content string) string {
 	if a.Filename == "" {
-		sdo := runtime.SaveDialogOptions {
-			DefaultDirectory: "",           // string
-			DefaultFilename:  "nutitile.md",           // string
-			Title:            "Save File",  // string
+		sdo := runtime.SaveDialogOptions{
+			DefaultDirectory: "",            // string
+			DefaultFilename:  "nutitile.md", // string
+			Title:            "Save File",   // string
 			Filters: []runtime.FileFilter{
 				{
 					DisplayName: "Markdown Files (*.md)",
@@ -118,9 +117,9 @@ func (a *App) GoSaveFile(content string) string {
 func (a *App) GoSaveAsFile(content string) map[string]interface{} {
 	a.Filename = ""
 
-	sdo := runtime.SaveDialogOptions {
+	sdo := runtime.SaveDialogOptions{
 		DefaultDirectory: "",           // string
-		DefaultFilename:  "untitle.md",           // string
+		DefaultFilename:  "untitle.md", // string
 		Title:            "Save File",  // string
 		Filters: []runtime.FileFilter{
 			{
@@ -129,7 +128,7 @@ func (a *App) GoSaveAsFile(content string) map[string]interface{} {
 			},
 		}, // []FileFilter
 	}
-	
+
 	filename, _ := runtime.SaveFileDialog(a.ctx, sdo)
 
 	if filename != "" {

@@ -46,9 +46,8 @@ jobs:
       #  run: cd frontend && bun run build # Or your build command
 
       - name: Build wails
-        # uses: ./wails_build.yml
         # uses: dAppServer/wails-build-action@v2.2
-        uses: stxh/wails-build-action@v2.6
+        uses: stxh/wails-build-action@pr
         id: build
         with:
           build-name: ${{ matrix.build.name }}
@@ -56,3 +55,7 @@ jobs:
           package: true
           go-version: "1.23"
           macos-build-name: "mdPad"
+          no-node: "true"
+          no-deno: "true"
+          no-bun: "false"
+          ubuntu24: "-tags webkit2_41"
