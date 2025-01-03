@@ -66,7 +66,7 @@
             click () { clickSaveAsFile(vditor) },
           },
           "|","undo","redo","|","emoji","headings","bold","italic","strike","link","|","list","ordered-list","check","outdent","indent",
-          "|","quote","line","code","inline-code","insert-before","insert-after","|","table","content-theme",
+          "|","quote","line","code","inline-code","insert-before","insert-after","|","table","edit-mode",
       ],
       toolbarConfig: {pin: true},
       after:(() => {initMd(vditor)}),

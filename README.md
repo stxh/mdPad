@@ -28,7 +28,7 @@ mdPad is built on the Wails framework, using the Vditor Markdown editor for the 
 
 **Technology Stack:**
 
-* **Frontend:** HTML, CSS, JavaScript, Vditor
+* **Frontend:** HTML, CSS, JavaScript, [vditor](https://github.com/Vanessa219/vditor)
 * **Backend:** Go
 * **Framework:** [Wails v2](https://wails.io)
 * **Build Tools:** (Depending on the specific project configuration, Wails projects typically use Go's build tools)

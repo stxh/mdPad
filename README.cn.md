@@ -30,7 +30,7 @@ mdPad 基于 Wails 框架构建，前端使用 Vditor Markdown 编辑器，后�
 
 **技术栈：**
 
-* **前端：** HTML、CSS、JavaScript、Vditor
+* **前端：** HTML、CSS、JavaScript、[vditor](https://github.com/Vanessa219/vditor)
 * **后端：** Go 语言
 * **框架：** [Wails v2](https://wails.io)
 * **构建工具：** (根据项目实际情况，通常 Wails 项目使用 Go 的构建工具)
