@@ -40,23 +40,96 @@ mdPad is built on the Wails framework, using the Vditor Markdown editor for the 
 3. **Install Wails CLI:** `go install github.com/wailsapp/wails/v2/cmd/wails@latest`
 4. **Clone the Repository:**
 
-   ```bash
-   git clone https://github.com/stxh/mdPad.git
-   cd mdPad
-   ```
+```bash
+git clone https://github.com/stxh/mdPad.git
+cd mdPad
+```
 5. **Initialize Wails Project (if needed):** If starting from scratch, you can use `wails init` to create a new project.
 6. **Install Frontend Dependencies (using Bun):**
 
-   ```bash
-   cd frontend
-   bun install
-   ```
+```bash
+cd frontend
+bun install
+```
 7. **Run the Development Server:**
 
-   ```bash
-   wails dev
-   ```
+```bash
+wails dev
+```
 
 **Code Structure:**
 
-(The following is an example; describe based on the actual project structure)
+（The description should be based on the actual project; the following is an example）
+
+```plaintext
+mdPad/
+├── wails.json         // Wails configuration file
+├── frontend/          // Frontend code
+│   ├── index.html
+│   ├── src/           // JavaScript/TypeScript source code
+│   │   ├── main.js      // or main.ts
+│   │   └── components/  // Components
+│   │       └── ...
+│   ├── package.json
+│   └── ...
+├── app.go             // Go backend code
+├── main.go            // Program entry point
+└── ...
+```
+
+**Key Code Snippets:**
+
+* **Frontend Vditor Integration:**
+
+  [vidtor](https://github.com/Vanessa219/vditor)
+
+  **JavaScript**
+
+  ```javascript
+  import Vditor from 'vditor'
+
+  const vditor = new Vditor('vditor', {
+      // Vditor configuration options, e.g.:
+      mode: 'ir', // Instant rendering mode
+      height: '100%',
+      // ... other configurations
+  })
+  ```
+* **Go Backend and Frontend Interaction:** (Using the binding mechanism provided by Wails)
+  **Go**
+
+  ```go
+  // Go code
+  type App struct {
+          runtime *wails.Runtime
+  }
+
+  func (a *App) Greet(name string) string {
+          return "Hello " + name + ", from Go!"
+  }
+
+  // Binding in main.go
+  app := NewApp()
+  err := wails.CreateApp(&wails.AppConfig{
+          // ...
+          Bind: []interface{}{
+                  app,
+          },
+          // ...
+  })
+
+  // Frontend JavaScript calling Go function
+  window.backend.App.Greet("World").then(result => {
+          console.log(result) // Outputs "Hello World, from Go!"
+  })
+  ```
+
+**Contributing Code, Building, Other Instructions** are similar to previous versions; please refer to previous responses.
+
+**Important Changes and Notes:**
+
+* All `npm install` commands have been replaced with `bun install`.
+* To add new packages, use `bun add <package-name>` instead of `npm install <package-name>`. For devDependencies, use `bun add -d <package-name>`.
+* When running scripts, use `bun run <script>` instead of `npm run <script>`.
+
+With these modifications, you can now use Bun to manage the frontend dependencies of the mdPad project, leveraging the speed benefits that Bun offers. Please ensure that Bun is correctly installed in your development environment.
