@@ -1,4 +1,4 @@
-module changeme
+module mdPad
 
 go 1.22.4
 

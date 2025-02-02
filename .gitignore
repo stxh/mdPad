@@ -1,7 +1,7 @@
 build/bin
 node_modules
 frontend/dist
-wailsjs/go
+bin
 
 .DS_Store
 *.lock*
@@ -20,4 +20,6 @@ Cargo.lock
 
 # MSVC Windows builds of rustc generate these, which store debugging information
 *.pdb
-frontend/wailsjs/go
+wails.syso
+.task
+frontend/bindings
