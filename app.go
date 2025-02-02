@@ -91,7 +91,7 @@ func (a *App) GoSaveFile(content string) string {
 	if a.Filename == "" {
 		sdo := runtime.SaveDialogOptions{
 			DefaultDirectory: "",            // string
-			DefaultFilename:  "nutitile.md", // string
+			DefaultFilename:  "untitile.md", // string
 			Title:            "Save File",   // string
 			Filters: []runtime.FileFilter{
 				{

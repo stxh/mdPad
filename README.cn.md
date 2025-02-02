@@ -43,24 +43,24 @@ mdPad 基于 Wails 框架构建，前端使用 Vditor Markdown 编辑器，后�
 4. **克隆代码库：**
    **Bash**
 
-   ```bash
-   git clone https://github.com/stxh/mdPad.git
-   cd mdPad
-   ```
+```bash
+git clone https://github.com/stxh/mdPad.git
+cd mdPad
+```
 5. **初始化 Wails 项目（如果需要）：** 如果是从零开始，可以使用 `wails init` 创建项目。
 6. **安装前端依赖（使用 Bun）：**
    **Bash**
 
-   ```bash
-   cd frontend
-   bun install
-   ```
+```bash
+cd frontend
+bun install
+```
 7. **运行开发服务器：**
    **Bash**
 
-   ```
-   wails dev
-   ```
+```
+wails dev
+```
 
 **代码结构：**
 
