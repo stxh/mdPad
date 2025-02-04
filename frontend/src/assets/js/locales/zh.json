@@ -4,5 +4,6 @@
   "openFile": "打开文件",
   "save": "保存", 
   "saveAs": "另存为...",
-  "saveToast": "保存到文件: "
+  "saveToast": "保存到文件: ",
+  "closeButton": "关闭"
 }

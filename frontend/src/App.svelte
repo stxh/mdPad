@@ -8,13 +8,18 @@
   import * as wails from "@wailsio/runtime";
   
   let filename = "";
+  let bChnaged = false;
+  let aboutDialog;
 
   function setWindowTitle() {
     let title = "mdPad"
     if (filename != "") {
       title += " - " + filename
     }
-    // console.log("--> setWindowTitle title=", title)
+
+    if (bChnaged) {
+      title += " *"
+    }
     wails.Window.SetTitle(title)
   }
 
@@ -79,11 +84,13 @@
             tip: $i18n.t('about'),
             className: 'right',
         icon: '<svg width="125px" height="125px" viewBox="0 0 24 24" fill="#000000" xmlns="http://www.w3.org/2000/svg" xmlns:bx="https://boxy-svg.com"><path d="M3 9.22843V14.7716C3 15.302 3.21071 15.8107 3.58579 16.1858L7.81421 20.4142C8.18929 20.7893 8.69799 21 9.22843 21H14.7716C15.302 21 15.8107 20.7893 16.1858 20.4142L20.4142 16.1858C20.7893 15.8107 21 15.302 21 14.7716V9.22843C21 8.69799 20.7893 8.18929 20.4142 7.81421L16.1858 3.58579C15.8107 3.21071 15.302 3 14.7716 3H9.22843C8.69799 3 8.18929 3.21071 7.81421 3.58579L3.58579 7.81421C3.21071 8.18929 3 8.69799 3 9.22843Z" stroke-linecap="round" stroke-linejoin="round" style="fill-opacity: 0; paint-order: fill; stroke-width: 2px; stroke: rgb(0, 0, 0);"></path><path d="M12 8V13" stroke="#323232" stroke-width="2" stroke-linecap="round"></path><path d="M12 16V15.9888" stroke="#323232" stroke-width="2" stroke-linecap="round"></path></svg>',
-            click () {() => (showModal = true)},
+            click () {showAboutDialog()},
           },
       ],
       toolbarConfig: {pin: true},
-      after:(() => {initMd(vditor)}),
+      after:(() => {
+        wails.Window.SetMinSize(1024, 178)
+        initMd(vditor)}),
     })
 
   })
@@ -106,23 +113,14 @@
   }
 
   function clickOpenFile(vditor) {
-    wails.Dialogs.OpenFile({
-      CanChooseFiles: false,
-      AllowsMultipleSelection: false,
-      Filters: [{DisplayName: "Open Markdown File(*.md)", Pattern: "*.md"}]
-    }).then((filename) => {
-      alert(filename)
-    }).catch((error) => {
-      console.error("Read File", error); // 处理失败的情况
-    });
-
-
-    // App.GoOpenFile().then((result) => {
-    //   //  console.log("result ->", result.filename, result.value)
-    //   filename = result.filename;
-    //   setWindowTitle()
-    //   vditor.setValue(result.value, true)
-    //})
+      App.GoOpenFile().then((result) => {
+        //  console.log("result ->", result.filename, result.value)
+        filename = result.filename;
+        setWindowTitle()
+        vditor.setValue(result.value, true)
+      }).catch((error) => {
+        console.error("Read File", error); // 处理失败的情况
+      });
   }
 
   function clickSaveFile(vditor) {
@@ -139,16 +137,41 @@
     })
   }
 
+  function BrowserOpenFile() {
+      throw new Error("Function not implemented.");
+  }
 
+  // About Dialog Functionality
+  function showAboutDialog() {
+    aboutDialog.classList.add("active");
+  }
 
-    function BrowserOpenFile() {
-        throw new Error("Function not implemented.");
-    }
+  function hideAboutDialog() {
+    aboutDialog.classList.remove("active");
+  }
 </script>
 
 
 <main>
   <div id="contains">
     <div id="vditor-container"></div>
+
+    <!-- About Dialog -->
+    <div id="about-dialog" class="dialog-overlay" bind:this={aboutDialog} >
+      <div class="dialog-content">
+          <h2 data-i18n="aboutTitle">About</h2>
+          <p data-i18n="aboutContent">
+              mdVditor is a desktop Markdown application developed
+              using the neutralino framework. It combines the powerful
+              backend capabilities of neutralino with modern web
+              frontend js vditor technologies to provide a smooth and
+              efficient Markdown editing experience.
+          </p>
+          <button id="close-about" data-i18n="closeButton" on:click={hideAboutDialog}>
+              Close
+          </button>
+      </div>
+    </div>
+  
   </div>
 </main>

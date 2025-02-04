@@ -39,14 +39,6 @@ func main() {
 		Mac: application.MacOptions{
 			ApplicationShouldTerminateAfterLastWindowClosed: true,
 		},
-
-		// PanicHandler: func(panicDetails *application.PanicDetails) {
-		// 	fmt.Printf("*** Custom Panic Handler ***\n")
-		// 	fmt.Printf("Time: %s\n", panicDetails.Time)
-		// 	fmt.Printf("Error: %s\n", panicDetails.Error)
-		// 	fmt.Printf("Stacktrace: %s\n", panicDetails.StackTrace)
-		// 	fmt.Printf("Full Stacktrace: %s\n", panicDetails.FullStackTrace)
-		// },
 	})
 
 	// Create a new window with the necessary options.

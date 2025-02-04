@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"log"
 	"os"
@@ -11,7 +10,6 @@ import (
 
 // App struct
 type App struct {
-	ctx      context.Context
 	Filename string
 }
 
@@ -24,12 +22,6 @@ func NewApp() *App {
 		log.Println("--> Filename in Args: ", filename)
 	}
 	return &App{Filename: filename}
-}
-
-// startup is called when the app starts. The context is saved
-// so we can call the application methods
-func (a *App) startup(ctx context.Context) {
-	a.ctx = ctx
 }
 
 // GetMdContent
@@ -60,44 +52,24 @@ func (a *App) GoNewFile() string {
 
 // goOpenFile
 func (a *App) GoOpenFile() map[string]interface{} {
-	dialog := application.OpenFileDialog()
-	// dialog.SetTitle("Select Markdown file")
-	// dialog.SetFilters([]*application.FileFilter{
-	// 	{
-	// 		DisplayName: "Markdown (*.md)",
-	// 		Pattern:     "*.md",
-	// 	},
-	// })
+	cwd, _ := os.Getwd()
+	dialog := application.OpenFileDialog().
+		SetTitle("Open Markdown File").
+		SetMessage("Select a markdown file to open").
+		SetDirectory(cwd).
+		AddFilter("Markdown file(*.md)", "*.md")
 
-	// Single file selection
-	filename, err := dialog.PromptForSingleSelection()
-	if err != nil {
+	filename, _ := dialog.PromptForSingleSelection()
+	if filename == "" {
 		return map[string]interface{}{"value": "", "filename": ""}
 	}
 
-	// odo := application.OpenDialogOptions{
-	// 	DefaultDirectory: "",          // string
-	// 	DefaultFilename:  "",          // string
-	// 	Title:            "Open File", // string
-	// 	Filters: []application.FileFilter{
-	// 		{
-	// 			DisplayName: "Markdown Files (*.md)",
-	// 			Pattern:     "*.md",
-	// 		},
-	// 	}, // []FileFilter
-	// }
-
-	// filename, err := application.OpenFileDialog(a.ctx, odo)
-	// if err != nil {
-	// 	return map[string]interface{}{"value": "", "filename": ""}
-	// }
-
-	a.Filename = filename
 	content, err := os.ReadFile(filename)
 	if err != nil {
 		return map[string]interface{}{"value": "", "filename": ""}
 	}
 
+	a.Filename = filename
 	return map[string]interface{}{"value": string(content), "filename": filename}
 }
 
