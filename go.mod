@@ -4,10 +4,7 @@ go 1.22.4
 
 toolchain go1.23.4
 
-require (
-	github.com/wailsapp/wails/v2 v2.5.0
-	github.com/wailsapp/wails/v3 v3.0.0-alpha.7
-)
+require github.com/wailsapp/wails/v3 v3.0.0-alpha.7
 
 require (
 	dario.cat/mergo v1.0.0 // indirect
@@ -29,7 +26,6 @@ require (
 	github.com/jchv/go-winloader v0.0.0-20210711035445-715c2860da7e // indirect
 	github.com/kevinburke/ssh_config v1.2.0 // indirect
 	github.com/leaanthony/go-ansi-parser v1.6.1 // indirect
-	github.com/leaanthony/slicer v1.5.0 // indirect
 	github.com/leaanthony/u v1.1.0 // indirect
 	github.com/lmittmann/tint v1.0.4 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
@@ -40,7 +36,7 @@ require (
 	github.com/samber/lo v1.38.1 // indirect
 	github.com/sergi/go-diff v1.2.0 // indirect
 	github.com/skeema/knownhosts v1.2.1 // indirect
-	github.com/wailsapp/go-webview2 v1.0.15 // indirect
+	github.com/wailsapp/go-webview2 v1.0.19 // indirect
 	github.com/wailsapp/mimetype v1.4.1 // indirect
 	github.com/xanzy/ssh-agent v0.3.3 // indirect
 	golang.org/x/crypto v0.23.0 // indirect
@@ -48,7 +44,7 @@ require (
 	golang.org/x/mod v0.17.0 // indirect
 	golang.org/x/net v0.25.0 // indirect
 	golang.org/x/sync v0.7.0 // indirect
-	golang.org/x/sys v0.20.0 // indirect
+	golang.org/x/sys v0.27.0 // indirect
 	golang.org/x/tools v0.21.0 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
 )

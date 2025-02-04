@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/wailsapp/wails/v2/pkg/runtime"
+	"github.com/wailsapp/wails/v3/pkg/application"
 )
 
 // App struct
@@ -27,7 +27,7 @@ func NewApp() *App {
 }
 
 // startup is called when the app starts. The context is saved
-// so we can call the runtime methods
+// so we can call the application methods
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 }
@@ -60,22 +60,37 @@ func (a *App) GoNewFile() string {
 
 // goOpenFile
 func (a *App) GoOpenFile() map[string]interface{} {
-	odo := runtime.OpenDialogOptions{
-		DefaultDirectory: "",          // string
-		DefaultFilename:  "",          // string
-		Title:            "Open File", // string
-		Filters: []runtime.FileFilter{
-			{
-				DisplayName: "Markdown Files (*.md)",
-				Pattern:     "*.md",
-			},
-		}, // []FileFilter
-	}
+	dialog := application.OpenFileDialog()
+	// dialog.SetTitle("Select Markdown file")
+	// dialog.SetFilters([]*application.FileFilter{
+	// 	{
+	// 		DisplayName: "Markdown (*.md)",
+	// 		Pattern:     "*.md",
+	// 	},
+	// })
 
-	filename, err := runtime.OpenFileDialog(a.ctx, odo)
+	// Single file selection
+	filename, err := dialog.PromptForSingleSelection()
 	if err != nil {
 		return map[string]interface{}{"value": "", "filename": ""}
 	}
+
+	// odo := application.OpenDialogOptions{
+	// 	DefaultDirectory: "",          // string
+	// 	DefaultFilename:  "",          // string
+	// 	Title:            "Open File", // string
+	// 	Filters: []application.FileFilter{
+	// 		{
+	// 			DisplayName: "Markdown Files (*.md)",
+	// 			Pattern:     "*.md",
+	// 		},
+	// 	}, // []FileFilter
+	// }
+
+	// filename, err := application.OpenFileDialog(a.ctx, odo)
+	// if err != nil {
+	// 	return map[string]interface{}{"value": "", "filename": ""}
+	// }
 
 	a.Filename = filename
 	content, err := os.ReadFile(filename)
@@ -88,55 +103,55 @@ func (a *App) GoOpenFile() map[string]interface{} {
 
 // GoSaveFile
 func (a *App) GoSaveFile(content string) string {
-	if a.Filename == "" {
-		sdo := runtime.SaveDialogOptions{
-			DefaultDirectory: "",            // string
-			DefaultFilename:  "untitile.md", // string
-			Title:            "Save File",   // string
-			Filters: []runtime.FileFilter{
-				{
-					DisplayName: "Markdown Files (*.md)",
-					Pattern:     "*.md",
-				},
-			}, // []FileFilter
-		}
-		filename, _ := runtime.SaveFileDialog(a.ctx, sdo)
-		a.Filename = filename
-	}
+	// if a.Filename == "" {
+	// 	sdo := application.SaveDialogOptions{
+	// 		DefaultDirectory: "",            // string
+	// 		DefaultFilename:  "untitile.md", // string
+	// 		Title:            "Save File",   // string
+	// 		Filters: []application.FileFilter{
+	// 			{
+	// 				DisplayName: "Markdown Files (*.md)",
+	// 				Pattern:     "*.md",
+	// 			},
+	// 		}, // []FileFilter
+	// 	}
+	// 	filename, _ := application.SaveFileDialog(a.ctx, sdo)
+	// 	a.Filename = filename
+	// }
 
-	if a.Filename != "" {
-		err := os.WriteFile(a.Filename, []byte(content), 0644)
-		if err == nil {
-			return "OK"
-		}
-	}
+	// if a.Filename != "" {
+	// 	err := os.WriteFile(a.Filename, []byte(content), 0644)
+	// 	if err == nil {
+	// 		return "OK"
+	// 	}
+	// }
 	return "Error"
 }
 
 // GoSaveAsFile resutl: {"value": "OK", "filename": "e:\\StXhCode\\go\\mdPad\\untitle.md"}
 func (a *App) GoSaveAsFile(content string) map[string]interface{} {
-	a.Filename = ""
+	// a.Filename = ""
 
-	sdo := runtime.SaveDialogOptions{
-		DefaultDirectory: "",           // string
-		DefaultFilename:  "untitle.md", // string
-		Title:            "Save File",  // string
-		Filters: []runtime.FileFilter{
-			{
-				DisplayName: "Markdown Files (*.md)",
-				Pattern:     "*.md",
-			},
-		}, // []FileFilter
-	}
+	// sdo := application.SaveDialogOptions{
+	// 	DefaultDirectory: "",           // string
+	// 	DefaultFilename:  "untitle.md", // string
+	// 	Title:            "Save File",  // string
+	// 	Filters: []application.FileFilter{
+	// 		{
+	// 			DisplayName: "Markdown Files (*.md)",
+	// 			Pattern:     "*.md",
+	// 		},
+	// 	}, // []FileFilter
+	// }
 
-	filename, _ := runtime.SaveFileDialog(a.ctx, sdo)
+	// filename, _ := application.SaveFileDialog(a.ctx, sdo)
 
-	if filename != "" {
-		a.Filename = filename
-		err := os.WriteFile(a.Filename, []byte(content), 0644)
-		if err == nil {
-			return map[string]interface{}{"value": "OK", "filename": a.Filename}
-		}
-	}
+	// if filename != "" {
+	// 	a.Filename = filename
+	// 	err := os.WriteFile(a.Filename, []byte(content), 0644)
+	// 	if err == nil {
+	// 		return map[string]interface{}{"value": "OK", "filename": a.Filename}
+	// 	}
+	// }
 	return map[string]interface{}{"value": "Error", "filename": ""}
 }

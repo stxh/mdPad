@@ -1,0 +1,38 @@
+html {
+    background-color: white;
+    /* text-align: center; */
+    color: black;
+}
+
+body {
+    height: 100vh;
+    width: 98%;
+    margin: 0 auto;
+    padding: 2px;
+    background-color: white;
+    overflow: hidden;
+}
+
+mjx-container[jax="CHTML"][display="true"] {
+    text-align: left !important;
+}
+
+#vditor-container {
+    width: 100%;
+    height: 99% !important;
+    margin: 2px;
+    padding: 3px;
+}
+
+#contains {
+    height: 98%;
+    overflow: hidden;
+}
+
+#app {
+    height: 100%;
+}
+
+main {
+    height: 100%;
+}

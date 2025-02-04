@@ -5,11 +5,11 @@
 	"info": {
 		"0000": {
 			"ProductVersion": "0.1.0",
-			"CompanyName": "My Company",
-			"FileDescription": "My Product Description",
-			"LegalCopyright": "© now, My Company",
-			"ProductName": "My Product",
-			"Comments": "This is a comment"
+			"CompanyName": "mdPad",
+			"FileDescription": "mdPad: a markdown pad",
+			"LegalCopyright": "© 2025, mdPad",
+			"ProductName": "mdPad",
+			"Comments": "mdPad: a markdown pad"
 		}
 	}
 }

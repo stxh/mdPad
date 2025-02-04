@@ -1,18 +1,12 @@
 <script>
   import { onMount } from "svelte"
   import Vditor from "vditor"
-  import i18n from './i18n'
+  import i18n from './assets/js/i18n'
 
-  import { app } from "../bindings/mdPad"
+  import { App } from "../bindings/mdPad"
+
+  import * as wails from "@wailsio/runtime";
   
-  import { SvelteToast, toast } from '@zerodevx/svelte-toast';
-  
-  // let popupModal = false;
-
-  function showToastMessage(message) {
-      toast.push(message);
-  }
-
   let filename = "";
 
   function setWindowTitle() {
@@ -21,13 +15,14 @@
       title += " - " + filename
     }
     // console.log("--> setWindowTitle title=", title)
-    WindowSetTitle(title)
+    wails.Window.SetTitle(title)
   }
 
   onMount(() => {
      // console.log("--> value=", value)
     const vditor = new Vditor("vditor-container", {
         theme: "classic",
+        cdn: "",
         toolbar: [
           {
             hotkey: '^n',
@@ -57,13 +52,13 @@
             click () { clickSaveFile(vditor) },
           },
           {
-            hotkey: '^⇧s',
+            hotkey: '^h',
             name: 'save as',
             tipPosition: 's',
             tip: $i18n.t('saveAs'),
             className: 'right',
             icon: '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="2 2 20 20"><path fill-rule="evenodd" d="M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7.414A2 2 0 0 0 20.414 6L18 3.586A2 2 0 0 0 16.586 3H5Zm10 11a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM8 7V5h8v2a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1Z" clip-rule="evenodd"/></svg>',
-            click () { clickSaveAsFile(vditor) },
+            click () { alert("Ctrl+H") },
           },
           "|","undo","redo","|","emoji","headings","bold","italic","strike","link","|","list","ordered-list","check","outdent","indent",
           "|","quote","line","code","inline-code","insert-before","insert-after","|","table","edit-mode",
@@ -74,7 +69,7 @@
             tipPosition: 's',
             tip: $i18n.t('setup'),
             className: 'right',
-            icon: '<svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill="#000000" d="M512 64a448 448 0 1 1 0 896 448 448 0 0 1 0-896zm23.744 191.488c-52.096 0-92.928 14.784-123.2 44.352-30.976 29.568-45.76 70.4-45.76 122.496h80.256c0-29.568 5.632-52.8 17.6-68.992 13.376-19.712 35.2-28.864 66.176-28.864 23.936 0 42.944 6.336 56.32 19.712 12.672 13.376 19.712 31.68 19.712 54.912 0 17.6-6.336 34.496-19.008 49.984l-8.448 9.856c-45.76 40.832-73.216 70.4-82.368 89.408-9.856 19.008-14.08 42.24-14.08 68.992v9.856h80.96v-9.856c0-16.896 3.52-31.68 10.56-45.76 6.336-12.672 15.488-24.64 28.16-35.2 33.792-29.568 54.208-48.576 60.544-55.616 16.896-22.528 26.048-51.392 26.048-86.592 0-42.944-14.08-76.736-42.24-101.376-28.16-25.344-65.472-37.312-111.232-37.312zm-12.672 406.208a54.272 54.272 0 0 0-38.72 14.784 49.408 49.408 0 0 0-15.488 38.016c0 15.488 4.928 28.16 15.488 38.016A54.848 54.848 0 0 0 523.072 768c15.488 0 28.16-4.928 38.72-14.784a51.52 51.52 0 0 0 16.192-38.72 51.968 51.968 0 0 0-15.488-38.016 55.936 55.936 0 0 0-39.424-14.784z"></path></g></svg>',
+        icon: '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_iconCarrier"><path d="M10.255 4.18806C9.84269 5.17755 8.68655 5.62456 7.71327 5.17535C6.10289 4.4321 4.4321 6.10289 5.17535 7.71327C5.62456 8.68655 5.17755 9.84269 4.18806 10.255C2.63693 10.9013 2.63693 13.0987 4.18806 13.745C5.17755 14.1573 5.62456 15.3135 5.17535 16.2867C4.4321 17.8971 6.10289 19.5679 7.71327 18.8246C8.68655 18.3754 9.84269 18.8224 10.255 19.8119C10.9013 21.3631 13.0987 21.3631 13.745 19.8119C14.1573 18.8224 15.3135 18.3754 16.2867 18.8246C17.8971 19.5679 19.5679 17.8971 18.8246 16.2867C18.3754 15.3135 18.8224 14.1573 19.8119 13.745C21.3631 13.0987 21.3631 10.9013 19.8119 10.255C18.8224 9.84269 18.3754 8.68655 18.8246 7.71327C19.5679 6.10289 17.8971 4.4321 16.2867 5.17535C15.3135 5.62456 14.1573 5.17755 13.745 4.18806C13.0987 2.63693 10.9013 2.63693 10.255 4.18806Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="paint-order: stroke; stroke: rgb(0, 0, 0);"></path><path d="M15 12C15 13.6569 13.6569 15 12 15C10.3431 15 9 13.6569 9 12C9 10.3431 10.3431 9 12 9C13.6569 9 15 10.3431 15 12Z" stroke-width="2" style="paint-order: stroke; stroke: rgb(0, 0, 0);"></path></g></svg>',
             click () {() => (showModal = true)},
           },
           {
@@ -83,7 +78,7 @@
             tipPosition: 's',
             tip: $i18n.t('about'),
             className: 'right',
-            icon: '<svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill="#000000" d="M512 64a448 448 0 1 1 0 896 448 448 0 0 1 0-896zm23.744 191.488c-52.096 0-92.928 14.784-123.2 44.352-30.976 29.568-45.76 70.4-45.76 122.496h80.256c0-29.568 5.632-52.8 17.6-68.992 13.376-19.712 35.2-28.864 66.176-28.864 23.936 0 42.944 6.336 56.32 19.712 12.672 13.376 19.712 31.68 19.712 54.912 0 17.6-6.336 34.496-19.008 49.984l-8.448 9.856c-45.76 40.832-73.216 70.4-82.368 89.408-9.856 19.008-14.08 42.24-14.08 68.992v9.856h80.96v-9.856c0-16.896 3.52-31.68 10.56-45.76 6.336-12.672 15.488-24.64 28.16-35.2 33.792-29.568 54.208-48.576 60.544-55.616 16.896-22.528 26.048-51.392 26.048-86.592 0-42.944-14.08-76.736-42.24-101.376-28.16-25.344-65.472-37.312-111.232-37.312zm-12.672 406.208a54.272 54.272 0 0 0-38.72 14.784 49.408 49.408 0 0 0-15.488 38.016c0 15.488 4.928 28.16 15.488 38.016A54.848 54.848 0 0 0 523.072 768c15.488 0 28.16-4.928 38.72-14.784a51.52 51.52 0 0 0 16.192-38.72 51.968 51.968 0 0 0-15.488-38.016 55.936 55.936 0 0 0-39.424-14.784z"></path></g></svg>',
+        icon: '<svg width="125px" height="125px" viewBox="0 0 24 24" fill="#000000" xmlns="http://www.w3.org/2000/svg" xmlns:bx="https://boxy-svg.com"><path d="M3 9.22843V14.7716C3 15.302 3.21071 15.8107 3.58579 16.1858L7.81421 20.4142C8.18929 20.7893 8.69799 21 9.22843 21H14.7716C15.302 21 15.8107 20.7893 16.1858 20.4142L20.4142 16.1858C20.7893 15.8107 21 15.302 21 14.7716V9.22843C21 8.69799 20.7893 8.18929 20.4142 7.81421L16.1858 3.58579C15.8107 3.21071 15.302 3 14.7716 3H9.22843C8.69799 3 8.18929 3.21071 7.81421 3.58579L3.58579 7.81421C3.21071 8.18929 3 8.69799 3 9.22843Z" stroke-linecap="round" stroke-linejoin="round" style="fill-opacity: 0; paint-order: fill; stroke-width: 2px; stroke: rgb(0, 0, 0);"></path><path d="M12 8V13" stroke="#323232" stroke-width="2" stroke-linecap="round"></path><path d="M12 16V15.9888" stroke="#323232" stroke-width="2" stroke-linecap="round"></path></svg>',
             click () {() => (showModal = true)},
           },
       ],
@@ -94,7 +89,7 @@
   })
 
   function initMd(vditor) {
-    app.GetMdContent().then((result) => {
+    App.GetMdContent().then((result) => {
       // console.log("result ->", result)
       filename = result.filename;
       setWindowTitle()
@@ -103,7 +98,7 @@
   }
 
   function clickNewFile(vditor) {
-    app.GoNewFile() .then(() => {
+    App.GoNewFile() .then(() => {
       filename = "";
       setWindowTitle()
       vditor.setValue("")
@@ -111,34 +106,49 @@
   }
 
   function clickOpenFile(vditor) {
-    app.GoOpenFile().then((result) => {
-      //  console.log("result ->", result.filename, result.value)
-      filename = result.filename;
-      setWindowTitle()
-      vditor.setValue(result.value, true)
-    })
+    wails.Dialogs.OpenFile({
+      CanChooseFiles: false,
+      AllowsMultipleSelection: false,
+      Filters: [{DisplayName: "Open Markdown File(*.md)", Pattern: "*.md"}]
+    }).then((filename) => {
+      alert(filename)
+    }).catch((error) => {
+      console.error("Read File", error); // 处理失败的情况
+    });
+
+
+    // App.GoOpenFile().then((result) => {
+    //   //  console.log("result ->", result.filename, result.value)
+    //   filename = result.filename;
+    //   setWindowTitle()
+    //   vditor.setValue(result.value, true)
+    //})
   }
 
   function clickSaveFile(vditor) {
-    app.GoSaveFile(vditor.getValue()).then((result) => {
+    App.GoSaveFile(vditor.getValue()).then((result) => {
       showToastMessage($i18n.t("saveToast") + filename + " " + result)
     })
   }
 
   function clickSaveAsFile(vditor) {
-    app.GoSaveAsFile(vditor.getValue()).then((result, file) => {
+    App.GoSaveAsFile(vditor.getValue()).then((result, file) => {
       // console.log("result", result, "file", file) 
       filename = file;
       showToastMessage($i18n.t("saveToast") + filename + " " + result)
     })
   }
 
+
+
+    function BrowserOpenFile() {
+        throw new Error("Function not implemented.");
+    }
 </script>
 
 
 <main>
-  <div id="vditor-container"></div>
+  <div id="contains">
+    <div id="vditor-container"></div>
+  </div>
 </main>
-
-<SvelteToast />
-
