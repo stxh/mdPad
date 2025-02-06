@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/wailsapp/wails/v3/pkg/application"
 )
@@ -14,7 +15,7 @@ type App struct {
 }
 
 // NewApp creates a new App application struct
-func NewApp() *App {
+func New() *App {
 	var filename string
 	if len(os.Args) >= 2 {
 		// Get the first argument (os.Args[0] is the program path)
@@ -32,6 +33,9 @@ func (a *App) GetMdContent() map[string]interface{} {
 	}
 
 	content, err := os.ReadFile(a.Filename)
+	localDir = getFilePath(a.Filename)
+	log.Println("localDir:", localDir)
+
 	if err != nil {
 		errMsg := fmt.Sprintf("### Error\nError reading file: %v", err)
 		log.Println(errMsg)
@@ -66,6 +70,9 @@ func (a *App) GoOpenFile() map[string]interface{} {
 	}
 
 	a.Filename = filename
+	localDir = getFilePath(a.Filename)
+	log.Println("localDir:", localDir)
+
 	return map[string]interface{}{"value": string(content), "filename": filename}
 }
 
@@ -87,6 +94,9 @@ func (a *App) GoSaveFile(content string) string {
 	}
 
 	if a.Filename != "" {
+		localDir = getFilePath(a.Filename)
+		log.Println("localDir:", localDir)
+
 		err := os.WriteFile(a.Filename, []byte(content), 0644)
 		if err == nil {
 			return "OK"
@@ -100,10 +110,24 @@ func (a *App) GoSaveAsFile(content string) map[string]interface{} {
 	a.Filename = getNewFileName()
 
 	if a.Filename != "" {
+		localDir = getFilePath(a.Filename)
+		log.Println("localDir:", localDir)
+
 		err := os.WriteFile(a.Filename, []byte(content), 0644)
 		if err == nil {
 			return map[string]interface{}{"value": "OK", "filename": a.Filename}
 		}
 	}
 	return map[string]interface{}{"value": "Error", "filename": ""}
+}
+
+// get file path
+func getFilePath(filename string) string {
+	if filename != "" {
+		paths := strings.Split(filename, "/")
+		paths = paths[:len(paths)-1]
+		return strings.Join(paths, "/")
+	} else {
+		return ""
+	}
 }
