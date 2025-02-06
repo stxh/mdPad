@@ -116,10 +116,15 @@
   })
   
   function initMd(vditor) {
-    let toolbar = vditor.vditor.options.toolbar
-    for (let tool of toolbar) {
-      tool.tipPosition = "s"
-    }
+    // 修复toolbar的tip弹出方向
+    const toolButtons = document.querySelectorAll('div.vditor-toolbar button');
+
+    toolButtons.forEach(button => {
+      button.classList.remove("vditor-tooltipped__ne")
+      button.classList.remove("vditor-tooltipped__nw")
+      button.classList.remove("vditor-tooltipped__n")
+      button.classList.add("vditor-tooltipped__s")
+    })
     
     App.GetMdContent().then((result) => {
       // console.log("result ->", result)

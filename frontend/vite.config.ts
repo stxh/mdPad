@@ -11,15 +11,15 @@ export default defineConfig({
       targets: [
         {
           src: 'src/vditor/js', // Path to your module
-          dest: '', // Destination directory in 'dist'
+          dest: 'dist', // Destination directory in 'dist'
         },
         {
           src: 'src/vditor/css', // Path to your module
-          dest: '', // Destination directory in 'dist'
+          dest: 'dist', // Destination directory in 'dist'
         },
         {
           src: 'src/vditor/images', // Path to your module
-          dest: '', // Destination directory in 'dist'
+          dest: 'dist', // Destination directory in 'dist'
         },
       ],
     }),
