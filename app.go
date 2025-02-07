@@ -11,29 +11,17 @@ import (
 
 // App struct
 type App struct {
-	Filename string
-}
-
-// NewApp creates a new App application struct
-func New() *App {
-	var filename string
-	if len(os.Args) >= 2 {
-		// Get the first argument (os.Args[0] is the program path)
-		filename = os.Args[1]
-		log.Println("--> Filename in Args: ", filename)
-	}
-	return &App{Filename: filename}
 }
 
 // GetMdContent
 func (a *App) GetMdContent() map[string]interface{} {
-	if a.Filename == "" {
+	if gFileName == "" {
 		// log.Println("### Error\nNo filename specified")
 		return map[string]interface{}{"value": "", "filename": ""}
 	}
 
-	content, err := os.ReadFile(a.Filename)
-	localDir = getFilePath(a.Filename)
+	content, err := os.ReadFile(gFileName)
+	localDir = getFilePath(gFileName)
 	// log.Println("localDir:", localDir)
 
 	if err != nil {
@@ -43,12 +31,12 @@ func (a *App) GetMdContent() map[string]interface{} {
 	}
 
 	// log.Println("-->Content: ", string(content))
-	return map[string]interface{}{"value": string(content), "filename": a.Filename}
+	return map[string]interface{}{"value": string(content), "filename": gFileName}
 }
 
 // GoNewFile
 func (a *App) GoNewFile() string {
-	a.Filename = ""
+	gFileName = ""
 	return "OK"
 }
 
@@ -69,9 +57,9 @@ func (a *App) GoOpenFile() map[string]interface{} {
 		return map[string]interface{}{"value": "", "filename": ""}
 	}
 
-	a.Filename = filename
-	localDir = getFilePath(a.Filename)
-	// log.Println("localDir:", localDir, " a.Filename:", a.Filename)
+	gFileName = filename
+	localDir = getFilePath(gFileName)
+	// log.Println("localDir:", localDir, " gFileName:", gFileName)
 
 	return map[string]interface{}{"value": string(content), "filename": filename}
 }
@@ -89,15 +77,15 @@ func getNewFileName() string {
 
 // GoSaveFile
 func (a *App) GoSaveFile(content string) string {
-	if a.Filename == "" {
-		a.Filename = getNewFileName()
+	if gFileName == "" {
+		gFileName = getNewFileName()
 	}
 
-	if a.Filename != "" {
-		localDir = getFilePath(a.Filename)
+	if gFileName != "" {
+		localDir = getFilePath(gFileName)
 		// log.Println("localDir:", localDir)
 
-		err := os.WriteFile(a.Filename, []byte(content), 0644)
+		err := os.WriteFile(gFileName, []byte(content), 0644)
 		if err == nil {
 			return "OK"
 		}
@@ -107,15 +95,15 @@ func (a *App) GoSaveFile(content string) string {
 
 // GoSaveAsFile resutl: {"value": "OK", "filename": "e:\\StXhCode\\go\\mdPad\\untitle.md"}
 func (a *App) GoSaveAsFile(content string) map[string]interface{} {
-	a.Filename = getNewFileName()
+	gFileName = getNewFileName()
 
-	if a.Filename != "" {
-		localDir = getFilePath(a.Filename)
+	if gFileName != "" {
+		localDir = getFilePath(gFileName)
 		// log.Println("localDir:", localDir)
 
-		err := os.WriteFile(a.Filename, []byte(content), 0644)
+		err := os.WriteFile(gFileName, []byte(content), 0644)
 		if err == nil {
-			return map[string]interface{}{"value": "OK", "filename": a.Filename}
+			return map[string]interface{}{"value": "OK", "filename": gFileName}
 		}
 	}
 	return map[string]interface{}{"value": "Error", "filename": ""}

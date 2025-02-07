@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"github.com/wailsapp/wails/v3/pkg/application"
+	"github.com/wailsapp/wails/v3/pkg/events"
 )
 
 //go:embed frontend/dist
@@ -21,6 +22,9 @@ var assets embed.FS
 
 // localDir 设置为包级别变量
 var localDir string = "./"
+
+// gFileName 当前打开的文件名
+var gFileName string = ""
 
 func getMimeType(filename string) string {
 	var mimeTypesByExt = map[string]string{
@@ -96,6 +100,15 @@ func main() {
 		Mac: application.MacOptions{
 			ApplicationShouldTerminateAfterLastWindowClosed: true,
 		},
+	})
+
+	// Listen for files being used to open the application
+	app.OnApplicationEvent(events.Common.ApplicationStarted, func(event *application.ApplicationEvent) {
+		if len(os.Args) >= 2 {
+			if fileInfo, err := os.Stat(os.Args[1]); err == nil && !fileInfo.IsDir() {
+				gFileName = os.Args[1]
+			}
+		}
 	})
 
 	app.NewWebviewWindowWithOptions(application.WebviewWindowOptions{
