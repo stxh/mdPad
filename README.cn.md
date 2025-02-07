@@ -1,6 +1,6 @@
 # **mdPad Readme**
 
-mdPad 是一款基于 Wails 框架开发的桌面 Markdown 笔记应用。它结合了 Go 语言的强大后端能力和现代 Web 前端技术，提供流畅、高效的 Markdown 编辑体验。
+mdPad 是一款基于 Wails3 框架开发的桌面 Markdown 笔记应用。它结合了 Go 语言的强大后端能力和现代 Web 前端技术，提供流畅、高效的 Markdown 编辑体验。
 
 **主要功能：**
 
@@ -13,8 +13,8 @@ mdPad 是一款基于 Wails 框架开发的桌面 Markdown 笔记应用。它结
   * **脑图：** 使用 markmap 语法绘制脑图。
   * **图表：** 支持 ECharts 图表库。
   * **五线谱：** 支持 ABC.js 渲染五线谱。
-* **桌面应用体验：** 基于 Wails 构建，提供原生桌面应用的性能和体验，体积小巧，启动速度快。
-* **跨平台支持：** Wails 支持跨平台构建，mdPad 可以在 Windows、macOS 和 Linux 等操作系统上运行。
+* **桌面应用体验：** 基于 Wails3 构建，提供原生桌面应用的性能和体验，体积小巧，启动速度快。
+* **跨平台支持：** Wails3 支持跨平台构建，mdPad 可以在 Windows、macOS 和 Linux 等操作系统上运行。
 
 **使用方法：**
 
@@ -22,24 +22,24 @@ mdPad 是一款基于 Wails 框架开发的桌面 Markdown 笔记应用。它结
 2. **启动 mdPad：** 运行应用程序。
 3. **编辑 Markdown：** 在编辑器区域输入 Markdown 文本，会即时显示渲染后的效果。
 4. **保存/打开：** 使用提供的保存和打开功能管理笔记。
-5.
+5. **关联Markdown**：关联md文件后可双击打开md文件
 
 **mdPad 开发说明**
 
-mdPad 基于 Wails 框架构建，前端使用 Vditor Markdown 编辑器，后端使用 Go 语言。
+mdPad 基于 Wails3 框架构建，前端使用 Vditor Markdown 编辑器，后端使用 Go 语言。
 
 **技术栈：**
 
 * **前端：** HTML、CSS、JavaScript、[vditor](https://github.com/Vanessa219/vditor)
 * **后端：** Go 语言
-* **框架：** [Wails v2](https://wails.io)
-* **构建工具：** (根据项目实际情况，通常 Wails 项目使用 Go 的构建工具)
+* **框架：** [Wails v3](https://v3alpha.wails.io/getting-started/installation/)
+* **构建工具：** (根据项目实际情况，通常 Wails3 项目使用 Go 的构建工具)
 
 **开发环境搭建：**
 
 1. **安装 Go 环境：** 确保已安装 Go 语言环境。
 2. **安装 Bun：** 按照官方网站（[https://bun.sh/](https://www.google.com/url?sa=E&source=gmail&q=https://bun.sh/)）的指引安装 Bun。
-3. **安装 Wails CLI：**`go install github.com/wailsapp/wails/v2/cmd/wails@latest`
+3. **安装 Wails CLI：**`go install -v github.com/wailsapp/wails/v3/cmd/wails3@latest`
 4. **克隆代码库：**
    **Bash**
 
@@ -47,14 +47,15 @@ mdPad 基于 Wails 框架构建，前端使用 Vditor Markdown 编辑器，后�
 git clone https://github.com/stxh/mdPad.git
 cd mdPad
 ```
-5. **初始化 Wails 项目（如果需要）：** 如果是从零开始，可以使用 `wails init` 创建项目。
+
+5. **初始化 Wails 项目（如果需要）：** 如果是从零开始，可以使用 `wails3 init` 创建项目。
 6. **安装前端依赖（使用 Bun）：**
    **Bash**
 
 ```bash
-cd frontend
-bun install
+wails3 task dev
 ```
+
 7. **运行开发服务器：**
    **Bash**
 
@@ -68,7 +69,7 @@ wails dev
 
 ```
 mdPad/
-├── wails.json         // Wails 配置文件
+├── Taskfile.yml         // Wails 配置文件
 ├── frontend/          // 前端代码
 │   ├── index.html
 │   ├── src/           // JavaScript/TypeScript 源代码

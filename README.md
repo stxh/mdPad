@@ -1,6 +1,6 @@
 # mdPad README
 
-mdPad is a desktop Markdown note application developed using the Wails framework. It combines the powerful backend capabilities of Go with modern web frontend technologies to provide a smooth and efficient Markdown editing experience.
+mdPad is a desktop Markdown note application developed using the Wails3 framework. It combines the powerful backend capabilities of Go with modern web frontend technologies to provide a smooth and efficient Markdown editing experience.
 
 **Key Features:**
 
@@ -24,13 +24,13 @@ mdPad is a desktop Markdown note application developed using the Wails framework
 
 # mdPad Development Instructions
 
-mdPad is built on the Wails framework, using the Vditor Markdown editor for the frontend and Go for the backend.
+mdPad is built on the Wails3 framework, using the Vditor Markdown editor for the frontend and Go for the backend.
 
 **Technology Stack:**
 
 * **Frontend:** HTML, CSS, JavaScript, [vditor](https://github.com/Vanessa219/vditor)
 * **Backend:** Go
-* **Framework:** [Wails v2](https://wails.io)
+* **Framework:** [Wails v3](https://wails.io)
 * **Build Tools:** (Depending on the specific project configuration, Wails projects typically use Go's build tools)
 
 **Development Environment Setup:**
@@ -44,26 +44,27 @@ mdPad is built on the Wails framework, using the Vditor Markdown editor for the 
 git clone https://github.com/stxh/mdPad.git
 cd mdPad
 ```
+
 5. **Initialize Wails Project (if needed):** If starting from scratch, you can use `wails init` to create a new project.
 6. **Install Frontend Dependencies (using Bun):**
 
 ```bash
-cd frontend
-bun install
+wails3 task install:frontend:deps
 ```
+
 7. **Run the Development Server:**
 
 ```bash
-wails dev
+wails3 task dev
 ```
 
 **Code Structure:**
 
 （The description should be based on the actual project; the following is an example）
 
-```plaintext
+```text
 mdPad/
-├── wails.json         // Wails configuration file
+├── Taskfile.yml         // Wails configuration file
 ├── frontend/          // Frontend code
 │   ├── index.html
 │   ├── src/           // JavaScript/TypeScript source code
