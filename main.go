@@ -1,12 +1,16 @@
 package main
 
 import (
+	"bytes"
 	"embed"
 	_ "embed"
+	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/wailsapp/wails/v3/pkg/application"
@@ -18,76 +22,26 @@ var assets embed.FS
 // localDir 设置为包级别变量
 var localDir string = "./"
 
-// localFileHandler 实现了 http.Handler 接口，用于优先服务嵌入资源，并在资源未找到时尝试服务本地文件
-type localFileHandler struct {
-	assetsHandler http.Handler // 用于服务嵌入资源的 Handler
-	localDir      string       // 本地文件目录，用于查找 Markdown 文档相关的本地资源
-}
-
-func (h *localFileHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	log.Println("ServeHTTP -> ", r.URL)
-
-	// 1. 优先尝试从嵌入的 assets 中查找文件
-	rw := &responseRecorder{ResponseWriter: w}
-	h.assetsHandler.ServeHTTP(rw, r)
-
-	// 2. 如果 assets 中找不到文件 (状态码为 404)，则尝试从本地目录查找
-	if rw.status == http.StatusNotFound {
-		localFilePath := filepath.Join(h.localDir, r.URL.Path)
-		log.Println("尝试加载本地文件:", localFilePath)
-
-		_, err := os.Stat(localFilePath)
-		if err == nil {
-			// 本地文件存在，则使用 http.ServeFile 提供文件服务
-			log.Println("本地文件找到，提供服务:", localFilePath)
-			http.ServeFile(w, r, localFilePath)
-			return // 成功服务本地文件后直接返回
-		} else {
-			log.Println("本地文件未找到:", localFilePath, err)
-		}
+func getMimeType(filename string) string {
+	var mimeTypesByExt = map[string]string{
+		".avif": "image/avif",
+		".css":  "text/css; charset=utf-8",
+		".gif":  "image/gif",
+		".htm":  "text/html; charset=utf-8",
+		".html": "text/html; charset=utf-8",
+		".jpeg": "image/jpeg",
+		".jpg":  "image/jpeg",
+		".js":   "text/javascript; charset=utf-8",
+		".json": "application/json",
+		".mjs":  "text/javascript; charset=utf-8",
+		".pdf":  "application/pdf",
+		".png":  "image/png",
+		".svg":  "image/svg+xml",
+		".wasm": "application/wasm",
+		".webp": "image/webp",
+		".xml":  "text/xml; charset=utf-8",
 	}
-
-	// 3. 如果 assets 中找到文件 (无论本地文件是否存在)，或者本地文件不存在且 assets 中也找不到，则使用 assetsHandler 的处理结果
-	if rw.status != 0 { // 只有当 assetsHandler 设置了状态码时才应用，避免覆盖 http.ServeFile 的状态码
-		w.WriteHeader(rw.status)
-	}
-	if rw.header != nil {
-		for k, v := range rw.header {
-			for _, val := range v { // 复制所有 header 值
-				w.Header().Add(k, val)
-			}
-		}
-	}
-	if rw.body != nil {
-		w.Write(rw.body)
-	}
-}
-
-// responseRecorder 用于记录 ServeHTTP 的状态码和响应体
-type responseRecorder struct {
-	http.ResponseWriter
-	status int
-	header http.Header
-	body   []byte
-}
-
-func (rw *responseRecorder) WriteHeader(code int) {
-	rw.status = code
-}
-
-func (rw *responseRecorder) Header() http.Header {
-	if rw.header == nil {
-		rw.header = make(http.Header)
-	}
-	return rw.header
-}
-
-func (rw *responseRecorder) Write(buf []byte) (int, error) {
-	if rw.body == nil {
-		rw.body = []byte{}
-	}
-	rw.body = append(rw.body, buf...)
-	return rw.ResponseWriter.Write(buf)
+	return mimeTypesByExt[filepath.Ext(filename)]
 }
 
 func main() {
@@ -100,9 +54,44 @@ func main() {
 		},
 		Assets: application.AssetOptions{
 			Handler: application.AssetFileServerFS(assets),
-			// &localFileHandler{
-			// 	assets: application.AssetFileServerFS(assets),
-			// },
+			Middleware: func(next http.Handler) http.Handler {
+				return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
+					path := req.URL.Path
+					// log.Println(" --> Middleware path: ", path)
+
+					// 如果路径以 /dist 或 /wails 开头，或者以 http(s):// 开头，则直接跳过
+					if strings.HasPrefix(path, "/dist") || strings.HasPrefix(path, "/wails") || strings.HasPrefix(path, "http://") || strings.HasPrefix(path, "https://") {
+						next.ServeHTTP(rw, req)
+						return
+					}
+
+					// 检查本地文件是否存在
+					localFilePath := filepath.Join(localDir, path)
+					// log.Println(" --> Middleware real path: ", localFilePath)
+
+					if fileInfo, err := os.Stat(localFilePath); err == nil && !fileInfo.IsDir() {
+						// 如果本地文件存在，则使用 assetserver.ServeFile 处理
+						// log.Println(" --> Middleware find in local path: ", localFilePath)
+
+						fileData, _ := os.ReadFile(localFilePath)
+
+						header := rw.Header()
+						header.Set("Content-Length", fmt.Sprintf("%d", len(fileData)))
+						if mimeType := header.Get("Content-Type"); mimeType == "" {
+							mimeType = getMimeType(localFilePath)
+							header.Set("Content-Type", mimeType)
+						}
+
+						rw.WriteHeader(http.StatusOK)
+						io.Copy(rw, bytes.NewReader(fileData))
+
+						return
+					}
+
+					// 如果本地文件不存在，则调用 next.ServeHTTP
+					next.ServeHTTP(rw, req)
+				})
+			},
 		},
 		Mac: application.MacOptions{
 			ApplicationShouldTerminateAfterLastWindowClosed: true,

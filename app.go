@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strings"
+	"path/filepath"
 
 	"github.com/wailsapp/wails/v3/pkg/application"
 )
@@ -34,7 +34,7 @@ func (a *App) GetMdContent() map[string]interface{} {
 
 	content, err := os.ReadFile(a.Filename)
 	localDir = getFilePath(a.Filename)
-	log.Println("localDir:", localDir)
+	// log.Println("localDir:", localDir)
 
 	if err != nil {
 		errMsg := fmt.Sprintf("### Error\nError reading file: %v", err)
@@ -71,7 +71,7 @@ func (a *App) GoOpenFile() map[string]interface{} {
 
 	a.Filename = filename
 	localDir = getFilePath(a.Filename)
-	log.Println("localDir:", localDir)
+	// log.Println("localDir:", localDir, " a.Filename:", a.Filename)
 
 	return map[string]interface{}{"value": string(content), "filename": filename}
 }
@@ -83,7 +83,7 @@ func getNewFileName() string {
 		SetFilename("untitle.md").
 		PromptForSingleSelection()
 
-	log.Println("getNewFileName filename: ", filename)
+	// log.Println("getNewFileName filename: ", filename)
 	return filename
 }
 
@@ -95,7 +95,7 @@ func (a *App) GoSaveFile(content string) string {
 
 	if a.Filename != "" {
 		localDir = getFilePath(a.Filename)
-		log.Println("localDir:", localDir)
+		// log.Println("localDir:", localDir)
 
 		err := os.WriteFile(a.Filename, []byte(content), 0644)
 		if err == nil {
@@ -111,7 +111,7 @@ func (a *App) GoSaveAsFile(content string) map[string]interface{} {
 
 	if a.Filename != "" {
 		localDir = getFilePath(a.Filename)
-		log.Println("localDir:", localDir)
+		// log.Println("localDir:", localDir)
 
 		err := os.WriteFile(a.Filename, []byte(content), 0644)
 		if err == nil {
@@ -124,9 +124,7 @@ func (a *App) GoSaveAsFile(content string) map[string]interface{} {
 // get file path
 func getFilePath(filename string) string {
 	if filename != "" {
-		paths := strings.Split(filename, "/")
-		paths = paths[:len(paths)-1]
-		return strings.Join(paths, "/")
+		return filepath.Dir(filename)
 	} else {
 		return ""
 	}

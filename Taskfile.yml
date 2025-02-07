@@ -447,3 +447,10 @@ tasks:
     summary: Reloads the application
     cmds:
       - task: run
+
+  dev:backend:
+    summary: Debug backend only
+    deps:
+      - task: build
+    cmds:
+      - task: run
