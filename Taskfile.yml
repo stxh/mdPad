@@ -1,12 +1,11 @@
-version: '3'
+version: "3"
 
 vars:
   APP_NAME: "mdPad"
   BIN_DIR: "bin"
-  VITE_PORT: '{{.WAILS_VITE_PORT | default 9245}}'
+  VITE_PORT: "{{.WAILS_VITE_PORT | default 9245}}"
 
 tasks:
-
   ## -------------------------- Build -------------------------- ##
 
   build:
@@ -20,7 +19,6 @@ tasks:
       # - task: build:windows
       # - task: build:darwin
 
-
   ## ------> Windows <-------
 
   build:windows:
@@ -29,11 +27,11 @@ tasks:
       - task: go:mod:tidy
       - task: build:frontend
         vars:
-          BUILD_FLAGS: '{{.BUILD_FLAGS}}'
+          BUILD_FLAGS: "{{.BUILD_FLAGS}}"
       - task: generate:icons
       - task: generate:syso
         vars:
-          ARCH: '{{.ARCH}}'
+          ARCH: "{{.ARCH}}"
     cmds:
       - go build {{.BUILD_FLAGS}} -o {{.BIN_DIR}}/mdPad.exe
     vars:
@@ -41,7 +39,7 @@ tasks:
     env:
       GOOS: windows
       CGO_ENABLED: 0
-      GOARCH: '{{.ARCH | default ARCH}}'
+      GOARCH: "{{.ARCH | default ARCH}}"
       PRODUCTION: '{{.PRODUCTION | default "false"}}'
 
   build:windows:prod:arm64:
@@ -82,7 +80,7 @@ tasks:
       - task: go:mod:tidy
       - task: build:frontend
         vars:
-          BUILD_FLAGS: '{{.BUILD_FLAGS}}'
+          BUILD_FLAGS: "{{.BUILD_FLAGS}}"
       - task: generate:icons
     cmds:
       - go build {{.BUILD_FLAGS}} -o {{.BIN_DIR}}/{{.APP_NAME}}
@@ -91,7 +89,7 @@ tasks:
     env:
       GOOS: darwin
       CGO_ENABLED: 1
-      GOARCH: '{{.ARCH | default ARCH}}'
+      GOARCH: "{{.ARCH | default ARCH}}"
       CGO_CFLAGS: "-mmacosx-version-min=10.15"
       CGO_LDFLAGS: "-mmacosx-version-min=10.15"
       MACOSX_DEPLOYMENT_TARGET: "10.15"
@@ -127,7 +125,6 @@ tasks:
         vars:
           ARCH: amd64
 
-
   ## ------> Linux <-------
 
   build:linux:
@@ -136,10 +133,10 @@ tasks:
       - task: go:mod:tidy
       - task: build:frontend
         vars:
-          BUILD_FLAGS: '{{.BUILD_FLAGS}}'
+          BUILD_FLAGS: "{{.BUILD_FLAGS}}"
       - task: generate:icons
         vars:
-          ARCH: '{{.ARCH}}'
+          ARCH: "{{.ARCH}}"
     cmds:
       - go build {{.BUILD_FLAGS}} -o {{.BIN_DIR}}/mdPad
     vars:
@@ -147,7 +144,7 @@ tasks:
     env:
       GOOS: linux
       CGO_ENABLED: 1
-      GOARCH: '{{.ARCH | default ARCH}}'
+      GOARCH: "{{.ARCH | default ARCH}}"
       PRODUCTION: '{{.PRODUCTION | default "false"}}'
 
   build:linux:prod:arm64:
@@ -185,7 +182,6 @@ tasks:
   package:
     summary: Packages a production build of the application into a bundle
     cmds:
-
       # Package for current OS
       - task: package:{{OS}}
 
@@ -202,9 +198,9 @@ tasks:
     cmds:
       - task: create:nsis:installer
         vars:
-          ARCH: '{{.ARCH}}'
+          ARCH: "{{.ARCH}}"
     vars:
-        ARCH: '{{.ARCH | default ARCH}}'
+      ARCH: "{{.ARCH | default ARCH}}"
 
   package:windows:arm64:
     summary: Packages a production build of the application into a `.exe` bundle
@@ -226,7 +222,7 @@ tasks:
     cmds:
       - wails3 generate syso -arch {{.ARCH}} -icon icon.ico -manifest wails.exe.manifest -info info.json -out ../wails.syso
     vars:
-      ARCH: '{{.ARCH | default ARCH}}'
+      ARCH: "{{.ARCH | default ARCH}}"
 
   create:nsis:installer:
     summary: Creates an NSIS installer
@@ -240,18 +236,18 @@ tasks:
       - task: build:windows
         vars:
           PRODUCTION: "true"
-          ARCH: '{{.ARCH}}'
+          ARCH: "{{.ARCH}}"
     cmds:
       - makensis -DARG_WAILS_'{{.ARG_FLAG}}'_BINARY="{{.ROOT_DIR}}\{{.BIN_DIR}}\{{.APP_NAME}}.exe" project.nsi
     vars:
-      ARCH: '{{.ARCH | default ARCH}}'
+      ARCH: "{{.ARCH | default ARCH}}"
       ARG_FLAG: '{{if eq .ARCH "amd64"}}AMD64{{else}}ARM64{{end}}'
 
   ## ------>  Darwin <------
 
   package:darwin:
     summary: Packages a production build of the application into a `.app` bundle
-    platforms: [ darwin ]
+    platforms: [darwin]
     deps:
       - task: build:darwin
         vars:
@@ -261,7 +257,7 @@ tasks:
 
   package:darwin:arm64:
     summary: Packages a production build of the application into a `.app` bundle
-    platforms: [ darwin/arm64 ]
+    platforms: [darwin/arm64]
     deps:
       - task: package:darwin
         vars:
@@ -269,7 +265,7 @@ tasks:
 
   package:darwin:amd64:
     summary: Packages a production build of the application into a `.app` bundle
-    platforms: [ darwin/amd64 ]
+    platforms: [darwin/amd64]
     deps:
       - task: package:darwin
         vars:
@@ -287,7 +283,7 @@ tasks:
 
   package:linux:
     summary: Packages a production build of the application for Linux
-    platforms: [ linux ]
+    platforms: [linux]
     deps:
       - task: build:linux
         vars:
@@ -298,7 +294,7 @@ tasks:
   create:appimage:
     summary: Creates an AppImage
     dir: build/appimage
-    platforms: [ linux ]
+    platforms: [linux]
     deps:
       - task: build:linux
         vars:
@@ -311,19 +307,19 @@ tasks:
       # Generate AppImage
       - wails3 generate appimage -binary {{.APP_NAME}} -icon {{.ICON}} -desktopfile {{.DESKTOP_FILE}} -outputdir {{.OUTPUT_DIR}} -builddir {{.ROOT_DIR}}/build/appimage
     vars:
-      APP_NAME: '{{.APP_NAME}}'
-      APP_BINARY: '../../bin/{{.APP_NAME}}'
-      ICON: '../appicon.png'
-      DESKTOP_FILE: '{{.APP_NAME}}.desktop'
-      OUTPUT_DIR: '../../bin'
+      APP_NAME: "{{.APP_NAME}}"
+      APP_BINARY: "../../bin/{{.APP_NAME}}"
+      ICON: "../appicon.png"
+      DESKTOP_FILE: "{{.APP_NAME}}.desktop"
+      OUTPUT_DIR: "../../bin"
 
   generate:linux:dotdesktop:
     summary: Generates a `.desktop` file
     dir: build
     sources:
-        - "appicon.png"
+      - "appicon.png"
     generates:
-        - '{{.ROOT_DIR}}/build/appimage/{{.APP_NAME}}.desktop'
+      - "{{.ROOT_DIR}}/build/appimage/{{.APP_NAME}}.desktop"
     cmds:
       - mkdir -p {{.ROOT_DIR}}/build/appimage
       # Run `wails3 generate .desktop -help` for all the options
@@ -337,14 +333,13 @@ tasks:
       # -mimetype "application/x-extension1;application/x-extension2;"
 
     vars:
-      APP_NAME: '{{.APP_NAME}}'
-      EXEC: '{{.APP_NAME}}'
-      ICON: 'appicon'
-      CATEGORIES: 'Development;'
-      OUTPUTFILE: '{{.ROOT_DIR}}/build/appimage/{{.APP_NAME}}.desktop'
+      APP_NAME: "{{.APP_NAME}}"
+      EXEC: "{{.APP_NAME}}"
+      ICON: "appicon"
+      CATEGORIES: "Development;"
+      OUTPUTFILE: "{{.ROOT_DIR}}/build/appimage/{{.APP_NAME}}.desktop"
 
   ## -------------------------- Misc -------------------------- ##
-
 
   generate:icons:
     summary: Generates Windows `.ico` and Mac `.icns` files from an image
@@ -384,7 +379,7 @@ tasks:
       - install:frontend:deps
       - task: generate:bindings
         vars:
-          BUILD_FLAGS: '{{.BUILD_FLAGS}}'
+          BUILD_FLAGS: "{{.BUILD_FLAGS}}"
     cmds:
       - bun run build
 
@@ -410,8 +405,7 @@ tasks:
     cmds:
       - go mod tidy
 
-# ----------------------- dev ----------------------- #
-
+  # ----------------------- dev ----------------------- #
 
   run:
     summary: Runs the application
@@ -424,11 +418,11 @@ tasks:
 
   run:linux:
     cmds:
-      - '{{.BIN_DIR}}/{{.APP_NAME}}'
+      - "{{.BIN_DIR}}/{{.APP_NAME}}"
 
   run:darwin:
     cmds:
-      - '{{.BIN_DIR}}/{{.APP_NAME}}'
+      - "{{.BIN_DIR}}/{{.APP_NAME}}"
 
   dev:frontend:
     summary: Runs the frontend in development mode
