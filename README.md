@@ -1,5 +1,7 @@
 # mdPad README
 
+[中文](README.cn.md) | English
+
 mdPad is a desktop Markdown note application developed using the Wails3 framework. It combines the powerful backend capabilities of Go with modern web frontend technologies to provide a smooth and efficient Markdown editing experience.
 
 **Key Features:**
@@ -37,7 +39,7 @@ mdPad is built on the Wails3 framework, using the Vditor Markdown editor for the
 
 1. **Install Go Environment:** Ensure you have the Go language environment installed.
 2. **Install Bun:** Install Bun following the instructions on the official website: [https://bun.sh/](https://bun.sh/)
-3. **Install Wails CLI:** `go install github.com/wailsapp/wails/v2/cmd/wails@latest`
+3. **Install Wails CLI:** `go install github.com/wailsapp/wails/v3/cmd/wails@latest`
 4. **Clone the Repository:**
 
 ```bash

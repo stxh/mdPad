@@ -1,5 +1,7 @@
 # **mdPad Readme**
 
+中文 | [English](README.md)
+
 mdPad 是一款基于 Wails3 框架开发的桌面 Markdown 笔记应用。它结合了 Go 语言的强大后端能力和现代 Web 前端技术，提供流畅、高效的 Markdown 编辑体验。
 
 **主要功能：**
