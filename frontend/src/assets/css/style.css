@@ -118,3 +118,55 @@ main {
 .floating-button span {
     user-select: none;
 }
+
+.setting-dialog .dialog-content {
+    width: 400px; /* 调整宽度 */
+    padding: 20px; /* 增加内边距 */
+    border-radius: 8px; /* 圆角边框 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /*  হালকা শ্যাডো */
+  }
+
+  .setting-dialog h2 {
+    margin-top: 0;
+    margin-bottom: 20px; /* 增加标题下边距 */
+    color: #333; /* 深色标题 */
+    text-align: center; /* 标题居中 */
+  }
+
+  .setting-dialog .setting-item {
+    margin-bottom: 15px; /* 设置项之间间距 */
+    display: flex; /* 使用 Flexbox 布局 */
+    align-items: center; /* 垂直居中对齐 */
+  }
+
+  .setting-dialog .setting-item label {
+    margin-right: 15px; /* 标签和选择框间距 */
+    color: #555; /* 标签颜色 */
+    width: 80px; /* 固定标签宽度，使其对齐 */
+    text-align: right; /* 标签文本右对齐 */
+  }
+
+  .setting-dialog .setting-select {
+    padding: 8px; /* 选择框内边距 */
+    border-radius: 4px; /* 选择框圆角 */
+    border: 1px solid #ccc; /* 选择框边框 */
+    font-size: 1rem; /* 字体大小 */
+    flex-grow: 1; /* 让选择框填充剩余空间 */
+  }
+
+  .setting-dialog .dialog-button {
+    display: block; /* 按钮独占一行 */
+    margin: 20px auto 0; /* 按钮居中，并增加上边距 */
+    padding: 10px 20px; /* 按钮内边距 */
+    border: none; /* 移除边框 */
+    border-radius: 4px; /* 按钮圆角 */
+    background-color: #007bff; /* 蓝色背景 */
+    color: white; /* 白色文字 */
+    font-size: 1rem; /* 字体大小 */
+    cursor: pointer; /* 鼠标悬停时显示手型 */
+    transition: background-color 0.3s ease; /* 背景颜色过渡效果 */
+  }
+
+  .setting-dialog .dialog-button:hover {
+    background-color: #0056b3; /* 鼠标悬停时背景颜色加深 */
+  }

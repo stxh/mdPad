@@ -11,7 +11,6 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"time"
 
 	"github.com/wailsapp/wails/v3/pkg/application"
 	"github.com/wailsapp/wails/v3/pkg/events"
@@ -25,6 +24,9 @@ var localDir string = "./"
 
 // gFileName 当前打开的文件名
 var gFileName string = ""
+
+// bChanged 当前文件已修改
+var bChanged bool = false
 
 func getMimeType(filename string) string {
 	var mimeTypesByExt = map[string]string{
@@ -111,26 +113,32 @@ func main() {
 		}
 	})
 
-	app.NewWebviewWindowWithOptions(application.WebviewWindowOptions{
+	window := app.NewWebviewWindowWithOptions(application.WebviewWindowOptions{
 		Title: "mdPad",
 		Mac: application.MacWindow{
 			InvisibleTitleBarHeight: 50,
 			Backdrop:                application.MacBackdropTranslucent,
 			TitleBar:                application.MacTitleBarHiddenInset,
 		},
-		BackgroundColour: application.NewRGB(27, 38, 54),
-		URL:              "/",
+		BackgroundColour:           application.NewRGB(27, 38, 54),
+		URL:                        "/",
+		DefaultContextMenuDisabled: true,
+		EnableDragAndDrop:          true,
+		ShouldClose: func(window *application.WebviewWindow) bool {
+			ok := true
+			if bChanged {
+				ok = false
+				app.EmitEvent("qsave")
+			}
+			return ok
+		},
 	})
 
-	// Create a goroutine that emits an event containing the current time every second.
-	// The frontend can listen to this event and update the UI accordingly.
-	go func() {
-		for {
-			now := time.Now().Format(time.RFC1123)
-			app.EmitEvent("time", now)
-			time.Sleep(time.Second)
-		}
-	}()
+	window.OnWindowEvent(events.Common.WindowFilesDropped, func(event *application.WindowEvent) {
+		files := event.Context().DroppedFiles()
+		app.EmitEvent("files", files)
+		app.Logger.Info("Files Dropped!", "files", files)
+	})
 
 	// Run the application. This blocks until the application has been exited.
 	err := app.Run()

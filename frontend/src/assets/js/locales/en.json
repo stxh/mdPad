@@ -5,5 +5,10 @@
   "save": "Save",
   "saveAs": "Save As...",
   "saveToast": "Save to file: ",
-  "closeButton": "Close"
+  "closeButton": "Close",
+  "SaveTitle": "File Changed",
+  "SaveMessage": "Save current change?",
+  "themeLabel": "Theme:",
+  "languageLabel": "Language:",
+  "Cancel": "Cancel"
 }

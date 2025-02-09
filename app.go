@@ -10,8 +10,7 @@ import (
 )
 
 // App struct
-type App struct {
-}
+type App struct{}
 
 // GetMdContent
 func (a *App) GetMdContent() map[string]interface{} {
@@ -37,6 +36,7 @@ func (a *App) GetMdContent() map[string]interface{} {
 // GoNewFile
 func (a *App) GoNewFile() string {
 	gFileName = ""
+	bChanged = false
 	return "OK"
 }
 
@@ -59,7 +59,7 @@ func (a *App) GoOpenFile() map[string]interface{} {
 
 	gFileName = filename
 	localDir = getFilePath(gFileName)
-	// log.Println("localDir:", localDir, " gFileName:", gFileName)
+	bChanged = false
 
 	return map[string]interface{}{"value": string(content), "filename": filename}
 }
@@ -83,6 +83,7 @@ func (a *App) GoSaveFile(content string) string {
 
 	if gFileName != "" {
 		localDir = getFilePath(gFileName)
+		bChanged = false
 		// log.Println("localDir:", localDir)
 
 		err := os.WriteFile(gFileName, []byte(content), 0644)
@@ -99,6 +100,7 @@ func (a *App) GoSaveAsFile(content string) map[string]interface{} {
 
 	if gFileName != "" {
 		localDir = getFilePath(gFileName)
+		bChanged = false
 		// log.Println("localDir:", localDir)
 
 		err := os.WriteFile(gFileName, []byte(content), 0644)
@@ -107,6 +109,12 @@ func (a *App) GoSaveAsFile(content string) map[string]interface{} {
 		}
 	}
 	return map[string]interface{}{"value": "Error", "filename": ""}
+}
+
+// GoFileChanged
+func (a *App) GoFileChanged() bool {
+	bChanged = true
+	return bChanged
 }
 
 // get file path

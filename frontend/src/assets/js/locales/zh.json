@@ -5,5 +5,10 @@
   "save": "保存", 
   "saveAs": "另存为...",
   "saveToast": "保存到文件: ",
-  "closeButton": "关闭"
+  "closeButton": "关闭",
+  "SaveTitle": "文件已经修改",
+  "SaveMessage": "保存当前修改吗？",
+  "themeLabel": "主题:",
+  "languageLabel": "Language:",
+  "Cancel": "取消"
 }

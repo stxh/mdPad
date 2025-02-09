@@ -1,5 +1,7 @@
 <script>
   import { onMount } from "svelte"
+  import Swal from 'sweetalert2'
+
   import Vditor from "vditor"
   import i18n from './assets/js/i18n'
 
@@ -10,23 +12,21 @@
   let filename = "";
   let bChnaged = false;
   let aboutDialog;
+  let settingDialog;
   let vditor;
 
   function setWindowTitle() {
     let title = "mdPad"
-    if (filename != "") {
-      title += " - " + filename
-    }
+    if (filename != "") title += " - " + filename
 
-    if (bChnaged) {
-      title += " *"
-    }
+    if (bChnaged) title += " *"
+    
     wails.Window.SetTitle(title)
     setSaveButtonStatus()
   }
 
   onMount(() => {
-     // console.log("--> value=", value)
+    // console.log("--> value=", value)
     vditor = new Vditor("vditor-container", {
         theme: "classic",
         cdn: "",
@@ -78,14 +78,7 @@
             className: 'right',
             icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M13.85 22.25h-3.7c-.74 0-1.36-.54-1.45-1.27l-.27-1.89c-.27-.14-.53-.29-.79-.46l-1.8.72c-.7.26-1.47-.03-1.81-.65L2.2 15.53c-.35-.66-.2-1.44.36-1.88l1.53-1.19c-.01-.15-.02-.3-.02-.46 0-.15.01-.31.02-.46l-1.52-1.19c-.59-.45-.74-1.26-.37-1.88l1.85-3.19c.34-.62 1.11-.9 1.79-.63l1.81.73c.26-.17.52-.32.78-.46l.27-1.91c.09-.7.71-1.25 1.44-1.25h3.7c.74 0 1.36.54 1.45 1.27l.27 1.89c.27.14.53.29.79.46l1.8-.72c.71-.26 1.48.03 1.82.65l1.84 3.18c.36.66.2 1.44-.36 1.88l-1.52 1.19c.01.15.02.3.02.46s-.01.31-.02.46l1.52 1.19c.56.45.72 1.23.37 1.86l-1.86 3.22c-.34.62-1.11.9-1.8.63l-1.8-.72c-.26.17-.52.32-.78.46l-.27 1.91c-.1.68-.72 1.22-1.46 1.22zm-3.23-2h2.76l.37-2.55.53-.22c.44-.18.88-.44 1.34-.78l.45-.34 2.38.96 1.38-2.4-2.03-1.58.07-.56c.03-.26.06-.51.06-.78s-.03-.53-.06-.78l-.07-.56 2.03-1.58-1.39-2.4-2.39.96-.45-.35c-.42-.32-.87-.58-1.33-.77l-.52-.22-.37-2.55h-2.76l-.37 2.55-.53.21c-.44.19-.88.44-1.34.79l-.45.33-2.38-.95-1.39 2.39 2.03 1.58-.07.56a7 7 0 0 0-.06.79c0 .26.02.53.06.78l.07.56-2.03 1.58 1.38 2.4 2.39-.96.45.35c.43.33.86.58 1.33.77l.53.22.38 2.55z"></path><circle cx="12" cy="12" r="3.5"></circle></svg>',
             click () {
-              // let toolbar = vditor.vditor.options.toolbar
-              // // disableToolbar(toolbar, ['save'])
-              // console.log(toolbar)
-              
-              // const itemElement = toolbar['save'].children[0];
-              // itemElement.classList.add("vditor-menu--disabled");
-              
-              // autolog.log(" file saved", "success", 2500);
+              showSettingDialog()
             },
           },
           {
@@ -101,20 +94,43 @@
       toolbarConfig: {pin: true, hide: true},
       input:((_) => {
         // console.log(value)
-        bChnaged = true
-        setWindowTitle()
+        if (!bChnaged) {
+          App.GoFileChanged().then((ok) => {
+            bChnaged = ok
+            setWindowTitle()
+          })
+        }
       }),
       after:(() => {
         wails.Window.SetMinSize(1024, 178)
-        // console.log(vditor)
         initMd(vditor)
       }),
+      link: {
+        click: (bom) => {
+          wails.Browser.OpenURL(bom.innerHTML)
+        },
+      },
     })
 
-    // console.log(vditor)
+    wails.Events.On("files", function(event) {
+        let resultsHTML = "";
+        event.data.forEach(function(file) {
+            resultsHTML += "<br/>" + file;
+        });
+        alert(resultsHTML);
+    })
     
+    wails.Events.On("qsave", function(_) {
+      askSaveChanged().then(result => {
+        if (result.isConfirmed) {
+          clickSaveFile(vditor)
+          wails.Application.Quit()
+        }
+      })
+    })
   })
-  
+  //--------------onmount end--------------
+ 
   function initMd(vditor) {
     // 修复toolbar的tip弹出方向
     const toolButtons = document.querySelectorAll('div.vditor-toolbar button');
@@ -127,7 +143,6 @@
     })
     
     App.GetMdContent().then((result) => {
-      // console.log("result ->", result)
       filename = result.filename;
       setWindowTitle()
       vditor.setValue(result.value)
@@ -135,24 +150,62 @@
     });
   }
 
-  function clickNewFile(vditor) {
+  async function askSaveChanged() {
+    return Swal.fire({
+            title: $i18n.t('appTitle'),
+            text: $i18n.t('SaveMessage'),
+            showCancelButton: true,
+            showDenyButton: true,
+            reverseButtons: true,
+            confirmButtonText: 'Yes'
+        })
+  }
+
+  function newFile(vditor) {
     App.GoNewFile() .then(() => {
-      filename = "";
+        filename = ""
+        bChnaged = false
+        setWindowTitle()
+        vditor.setValue("")
+      })  
+  }
+
+  function clickNewFile(vditor) {
+    if (bChnaged) {
+      askSaveChanged().then(result => {
+        if (!result.isConfirmed) {
+          clickSaveFile(vditor)
+          newFile(vditor)
+        }
+      })
+    } else {
+      newFile(vditor)
+    }
+  }
+
+  function openFile(vditor) {
+    App.GoOpenFile().then((result) => {
+      //  console.log("result ->", result.filename, result.value)
+      filename = result.filename;
+      bChnaged = false;
       setWindowTitle()
-      vditor.setValue("")
-    })
+      vditor.setValue(result.value, true)
+    }).catch((error) => {
+      console.error("Read File", error); // 处理失败的情况
+    });
   }
 
   function clickOpenFile(vditor) {
-      App.GoOpenFile().then((result) => {
-        //  console.log("result ->", result.filename, result.value)
-        filename = result.filename;
-        bChnaged = false;
-        setWindowTitle()
-        vditor.setValue(result.value, true)
-      }).catch((error) => {
-        console.error("Read File", error); // 处理失败的情况
-      });
+    if (bChnaged) {
+      askSaveChanged().then(result => {
+        if (result.isConfirmed) {
+          clickSaveFile(vditor)
+          openFile(vditor)
+        }
+      })
+    } else {
+      openFile(vditor)
+    }
   }
 
   function clickSaveFile(vditor) {
@@ -189,6 +242,14 @@
   function hideAboutDialog() {
     aboutDialog.classList.remove("active");
   }
+
+  function showSettingDialog() {
+    settingDialog.classList.add("active");
+  }
+
+  function hideSettingDialog() {
+    settingDialog.classList.remove("active");
+  }
 </script>
 
 
@@ -201,13 +262,37 @@
       <div class="dialog-content">
           <h2 data-i18n="aboutTitle">About</h2>
           <p data-i18n="aboutContent">
-              mdPad is a desktop Markdown application developed
-              using the wails3 framework. It combines the powerful
+              mdPad is a desktop Markdown application developed using the wails3 framework. It combines the powerful
               backend capabilities of go with modern web frontend svelte and js vditor technologies to provide a smooth and
               efficient Markdown editing experience.
           </p>
           <button id="close-about" data-i18n="closeButton" on:click={hideAboutDialog}>
               Close
+          </button>
+      </div>
+    </div>
+
+    <!-- Setting Dialog -->
+    <div id="setting-dialog" class="dialog-overlay" bind:this={settingDialog} >
+      <div class="dialog-content">
+          <h2 data-i18n="settingTitle">设置</h2>
+          <div class="setting-item">
+              <label>{$i18n.t('themeLabel')}:</label>
+              <select>
+                  <option value="light" data-i18n="themeLight">明亮</option>
+                  <option value="dark" data-i18n="themeDark">暗色</option>
+                  <option value="system" data-i18n="themeSystem">跟随系统</option>
+              </select>
+          </div>
+          <div class="setting-item">
+              <label>{$i18n.t("languageLabel")}:</label>
+              <select>
+                  <option value="zh" data-i18n="languageZH">中文</option>
+                  <option value="en" data-i18n="languageEN">English</option>
+              </select>
+          </div>
+          <button id="close-setting" data-i18n="closeButton" on:click={hideSettingDialog}>
+              关闭
           </button>
       </div>
     </div>

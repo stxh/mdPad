@@ -39,7 +39,7 @@ mdPad is built on the Wails3 framework, using the Vditor Markdown editor for the
 
 1. **Install Go Environment:** Ensure you have the Go language environment installed.
 2. **Install Bun:** Install Bun following the instructions on the official website: [https://bun.sh/](https://bun.sh/)
-3. **Install Wails CLI:** `go install github.com/wailsapp/wails/v3/cmd/wails@latest`
+3. **Install Wails CLI:** `go install github.com/wailsapp/wails/v3/cmd/wails3@latest`
 4. **Clone the Repository:**
 
 ```bash
