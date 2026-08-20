@@ -122,7 +122,8 @@ func main() {
 		},
 		BackgroundColour:           application.NewRGB(27, 38, 54),
 		URL:                        "/",
-		DefaultContextMenuDisabled: true,
+		DefaultContextMenuDisabled: false,
+		DevToolsEnabled:            true,
 		EnableDragAndDrop:          true,
 		ShouldClose: func(window *application.WebviewWindow) bool {
 			ok := true

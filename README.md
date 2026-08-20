@@ -127,6 +127,11 @@ mdPad/
   })
   ```
 
+** code plan **
+
+[![Powered by OrcaRouter](https://img.shields.io/badge/Powered_by-OrcaRouter-2563eb)](https://www.orcarouter.ai/ref/ref_62776a306ba2b04766ac)
+
+
 **Contributing Code, Building, Other Instructions** are similar to previous versions; please refer to previous responses.
 
 **Important Changes and Notes:**

@@ -25,7 +25,36 @@
     setSaveButtonStatus()
   }
 
+
+  //------------------------------------------
   onMount(() => {
+    // document.addEventListener('contextmenu', function(event) {
+    //   event.preventDefault(); // Prevent the default context menu
+    // });
+
+  //   const customContextMenu = document.getElementById('customContextMenu');
+
+  // // 阻止默认右键菜单并显示自定义菜单
+  //   document.addEventListener('contextmenu', function(event) {
+  //     event.preventDefault(); // 阻止默认菜单
+
+  //     // 获取鼠标点击位置
+  //     let mouseX = event.clientX;
+  //     let mouseY = event.clientY;
+
+  //     // 设置自定义菜单位置
+  //     customContextMenu.style.left = mouseX + 'px';
+  //     customContextMenu.style.top = mouseY + 'px';
+  //     customContextMenu.style.display = 'block'; // 显示菜单
+  //   });
+
+  //   // 自定义菜单项的功能示例 (您可以根据需要修改)
+  //   function customMenuItemAction(itemName) {
+  //     alert('您点击了菜单项: ' + itemName);
+  //     customContextMenu.style.display = 'none'; // 执行操作后隐藏菜单
+  //   }
+
+
     // console.log("--> value=", value)
     vditor = new Vditor("vditor-container", {
         theme: "classic",
@@ -68,7 +97,7 @@
             click () { clickSaveAsFile(vditor) },
           },
           "|","undo","redo","|","emoji","headings","bold","italic","strike","link","|","list","ordered-list","check","outdent","indent",
-          "|","quote","line","code","inline-code","insert-before","insert-after","|","table","edit-mode",
+          "|","quote","line","code","inline-code","insert-before","insert-after","|","table","edit-mode","export",
           "|",
           {
             hotkey: '⌘,',
@@ -266,7 +295,7 @@
               backend capabilities of go with modern web frontend svelte and js vditor technologies to provide a smooth and
               efficient Markdown editing experience.
           </p>
-          <button id="close-about" data-i18n="closeButton" on:click={hideAboutDialog}>
+          <button class="dialog-button" id="close-about" data-i18n="closeButton" on:click={hideAboutDialog}>
               Close
           </button>
       </div>
@@ -277,7 +306,7 @@
       <div class="dialog-content">
           <h2 data-i18n="settingTitle">设置</h2>
           <div class="setting-item">
-              <label>{$i18n.t('themeLabel')}:</label>
+              <label>{$i18n.t('themeLabel')}</label>
               <select>
                   <option value="light" data-i18n="themeLight">明亮</option>
                   <option value="dark" data-i18n="themeDark">暗色</option>
@@ -285,16 +314,24 @@
               </select>
           </div>
           <div class="setting-item">
-              <label>{$i18n.t("languageLabel")}:</label>
+              <label>{$i18n.t("languageLabel")}</label>
               <select>
                   <option value="zh" data-i18n="languageZH">中文</option>
                   <option value="en" data-i18n="languageEN">English</option>
               </select>
           </div>
-          <button id="close-setting" data-i18n="closeButton" on:click={hideSettingDialog}>
+          <button class="dialog-button" id="close-setting" data-i18n="closeButton" on:click={hideSettingDialog}>
               关闭
           </button>
       </div>
+    </div>
+
+    <div id="customContextMenu">
+      <ul>
+        <li onclick="customMenuItemAction('Option 1')">选项一</li>
+        <li onclick="customMenuItemAction('Option 2')">选项二</li>
+        <li onclick="customMenuItemAction('Option 3')">选项三</li>
+        </ul>
     </div>
   
   </div>

@@ -49,9 +49,12 @@ main {
     justify-content: center;
     align-items: center;
     z-index: 1000;
-    opacity: 0; /* 初始透明 */
-    visibility: hidden; /* 初始隐藏 */
-    transition: opacity 0.3s ease; /* 添加过渡效果 */
+    opacity: 0;
+    /* 初始透明 */
+    visibility: hidden;
+    /* 初始隐藏 */
+    transition: opacity 0.3s ease;
+    /* 添加过渡效果 */
 }
 
 .dialog-overlay.active {
@@ -63,7 +66,8 @@ main {
     background: white;
     padding: 2rem;
     border-radius: 8px;
-    max-width: 400px;
+    max-width: 500px;
+    width: 400px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -77,7 +81,15 @@ main {
     line-height: 1.5;
 }
 
-#close-about {
+.dialog-content select {
+    border-radius: 2px;
+    max-width: 150px;
+    width: 110px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    font-size: 14px;
+}
+
+.dialog-button {
     background: #0078d7;
     color: white;
     border: none;
@@ -87,86 +99,197 @@ main {
     margin-top: 1rem;
 }
 
-#close-about:hover {
+.dialog-button:hover {
     background: #005ba1;
 }
 
-/* Floating Button */
-.floating-button {
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: #0078d7;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    cursor: pointer;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    z-index: 100;
-}
 
-.floating-button:hover {
-    background: #005ba1;
-    transform: scale(1.1);
-}
-
-.floating-button span {
-    user-select: none;
-}
-
-.setting-dialog .dialog-content {
-    width: 400px; /* 调整宽度 */
-    padding: 20px; /* 增加内边距 */
-    border-radius: 8px; /* 圆角边框 */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /*  হালকা শ্যাডো */
-  }
-
-  .setting-dialog h2 {
+.setting-dialog h2 {
     margin-top: 0;
-    margin-bottom: 20px; /* 增加标题下边距 */
-    color: #333; /* 深色标题 */
-    text-align: center; /* 标题居中 */
+    margin-bottom: 20px;
+    /* 增加标题下边距 */
+    color: #333;
+    /* 深色标题 */
+    text-align: center;
+    /* 标题居中 */
+}
+
+.setting-dialog .setting-item label {
+    margin-right: 300px;
+    /* 标签和选择框间距 */
+    color: #555;
+    /* 标签颜色 */
+    width: 180px;
+    /* 固定标签宽度，使其对齐 */
+    text-align: right;
+    /* 标签文本右对齐 */
+}
+
+.setting-dialog .setting-select {
+    padding: 8px;
+    /* 选择框内边距 */
+    border-radius: 4px;
+    /* 选择框圆角 */
+    border: 1px solid #ccc;
+    /* 选择框边框 */
+    font-size: 1rem;
+    /* 字体大小 */
+    flex-grow: 1;
+    /* 让选择框填充剩余空间 */
+}
+
+.settings-panel {
+    width: 300px;
+    /* 设置面板宽度，可以根据需要调整 */
+    font-family: sans-serif;
+    padding: 20px;
+}
+
+.settings-section {
+    margin-bottom: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    overflow: hidden;
+    /* 确保内容不超出边框 */
+}
+
+.section-title {
+    background-color: #f5f5f5;
+    padding: 10px 15px;
+    border-bottom: 1px solid #e0e0e0;
+    font-weight: bold;
+}
+
+.section-content {
+    padding: 15px;
+}
+
+.setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.setting-label {
+    font-weight: normal;
+}
+
+
+.dropdown {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+/* Toggle Switch 样式 */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+}
+
+.toggle-switch input[type="checkbox"] {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-switch label {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    border-radius: 34px;
+    transition: .4s;
+  }
+  
+  .toggle-switch label:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    border-radius: 50%;
+    transition: .4s;
   }
 
-  .setting-dialog .setting-item {
-    margin-bottom: 15px; /* 设置项之间间距 */
-    display: flex; /* 使用 Flexbox 布局 */
-    align-items: center; /* 垂直居中对齐 */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked+.slider {
+    background-color: #2196F3;
+    /* 选中时的背景颜色，可以更改为您喜欢的颜色 */
+}
+
+input:focus+.slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked+.slider:before {
+    transform: translateX(20px);
+}
+
+/* Rounded sliders */
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+#customContextMenu {
+    position: fixed; /* 固定定位，相对于浏览器窗口 */
+    z-index: 1000; /* 确保在其他元素之上 */
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 5px 0;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+    min-width: 150px;
+    display: none; /* 初始隐藏 */
   }
 
-  .setting-dialog .setting-item label {
-    margin-right: 15px; /* 标签和选择框间距 */
-    color: #555; /* 标签颜色 */
-    width: 80px; /* 固定标签宽度，使其对齐 */
-    text-align: right; /* 标签文本右对齐 */
+  #customContextMenu ul {
+    list-style: none; /* 移除默认列表样式 */
+    padding: 0;
+    margin: 0;
   }
 
-  .setting-dialog .setting-select {
-    padding: 8px; /* 选择框内边距 */
-    border-radius: 4px; /* 选择框圆角 */
-    border: 1px solid #ccc; /* 选择框边框 */
-    font-size: 1rem; /* 字体大小 */
-    flex-grow: 1; /* 让选择框填充剩余空间 */
+  #customContextMenu li {
+    padding: 8px 15px;
+    cursor: pointer;
+    white-space: nowrap; /* 防止菜单项文本换行 */
   }
 
-  .setting-dialog .dialog-button {
-    display: block; /* 按钮独占一行 */
-    margin: 20px auto 0; /* 按钮居中，并增加上边距 */
-    padding: 10px 20px; /* 按钮内边距 */
-    border: none; /* 移除边框 */
-    border-radius: 4px; /* 按钮圆角 */
-    background-color: #007bff; /* 蓝色背景 */
-    color: white; /* 白色文字 */
-    font-size: 1rem; /* 字体大小 */
-    cursor: pointer; /* 鼠标悬停时显示手型 */
-    transition: background-color 0.3s ease; /* 背景颜色过渡效果 */
-  }
-
-  .setting-dialog .dialog-button:hover {
-    background-color: #0056b3; /* 鼠标悬停时背景颜色加深 */
+  #customContextMenu li:hover {
+    background-color: #f0f0f0;
   }
